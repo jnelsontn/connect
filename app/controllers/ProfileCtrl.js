@@ -29,7 +29,7 @@ app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $fireba
 });
 
 
-    /* AngularFire cannot do this */
+  /* AngularFire cannot do this */
 	/* $scope.addMessage = () => {
       $scope.messages.$add({
     	uid: user,

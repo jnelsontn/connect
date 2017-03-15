@@ -81,18 +81,3 @@ app.controller('UserCtrl', function ($scope, $window, AuthFactory) {
   	};
 
 });
-
-
-
-	/*	AuthFactory.authWithProvider().then(function(result) {
-			console.log('logingoogle authwithprovider: ', result);
-	    	console.log("logged in user: ", result.user.uid);
-	    		// may do something with google token
-	    		var token = result.credential.accessToken;
-	    	//Once logged in, go to another view
-	    	$scope.isLoggedIn = true;
-	    	$window.location.href = "#!/profile/";
-	  	}).catch(function(error) {
-	    	console.log("error with google login", error);
-	  	});
-	}; */
