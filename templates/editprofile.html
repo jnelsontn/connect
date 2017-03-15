@@ -1,0 +1,37 @@
+
+<br />
+
+<div class="row">
+
+    <div class="col-sm-4">
+
+
+    	<img src="{{profile.photo}}" width="200" height="200" class="profilephoto">
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <!-- could be used for saving to database once we stop overwriting on startup -->
+        <!-- 
+        we'll use classes to show and hide when we wanna edit profile -->
+        name: <input ng-model="profile.name" ng-change="profile.$save()" type="text" /> <br />
+        e-mail: <input ng-model="profile.email" ng-change="email.$save()" type="text" />
+
+    </div>
+
+    <div class="col-sm-4">
+    	Editing Mode
+    </div>
+
+</div>
+
+<br><br>
+
+<div class="row">
+
+	<div class="col-sm-12">
+
+	</div>
+
+</div>

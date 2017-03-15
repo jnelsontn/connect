@@ -1,0 +1,32 @@
+<!-- Static NavBar -->
+<div class="collapse navbar-collapse" id="navbarSupportedContent" ng-controller="NavCtrl">
+
+<a class="navbar-brand" href="#">CONNECT</a>
+
+	<ul class="navbar-nav mr-auto">
+
+    	<li class="nav-item">
+    		<a class="nav-link" ng-show="isLoggedIn" href="#!/profile">Profile</a>
+     	</li>
+
+      <li class="nav-item">
+        <a class="nav-link" ng-show="isLoggedIn" href="#!/allusers">All Users</a>
+      </li>
+
+      <li class="nav-item">
+      	<a class="nav-link" ng-show="isLoggedIn" href="#!/music/list" disabled>Photos</a>
+      </li>
+
+    	<li class="nav-item">
+    		<!-- <a ng-show="!isLoggedIn" class="nav-link" href="#!/login">Login</a> -->
+    		<a ng-show="isLoggedIn" class="nav-link" href="#!/logout">Logout</a>
+     	</li>
+
+    </ul>
+
+    <form class="form-inline my-2 my-lg-0" ng-show="isLoggedIn">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+</div>
