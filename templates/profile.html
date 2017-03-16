@@ -6,19 +6,27 @@
     <div class="col-sm-4">
 
 
-    	<img src="{{profile.photo}}" width="200" height="200" class="profilephoto">
+        <img src="{{profile.photo}}" width="200" height="200" class="profilephoto">
 
     </div>
 
     <div class="col-sm-4">
 
-    	name: {{profile.name}} <br />
-    	e-mail: {{profile.email}}
+        name: {{profile.name}} <br />
+        e-mail: {{profile.email}}
 
     </div>
 
     <div class="col-sm-4">
-    	<a href="#!/profile/edit">Edit Profile</a>
+
+    
+        <button ng-if="myOwnProfile == false && AreWeFriends == false" class="btn btn-default" ng-click="connect($id)">{{connectReq}}</button> 
+        <a ng-if="myOwnProfile === true" href="#!/profile/{{profile.$id}}/edit">Edit Profile</a>
+        <div ng-if="AreWeFriends == true">We are friends</div>
+
+    </div>
+
+    <div class="col-sm-4">
     </div>
 
 </div>
@@ -27,7 +35,7 @@
 
 <div class="row">
 
-	<div class="col-sm-12">
+    <div class="col-sm-12">
 
       <ul class="chatbox">
             <li ng-repeat="message in messages">{{ message.from }}: {{ message.content }}</li>
@@ -37,7 +45,7 @@
             <input type="text" ng-model="message">
             <input type="submit" value="Add Message">
         </form>
-
-	</div>
+        
+    </div>
 
 </div>

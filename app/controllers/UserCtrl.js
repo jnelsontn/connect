@@ -1,14 +1,8 @@
 'use strict';
 
-// login, logout, register, loginGoogle, conditional, authfactory
-app.controller('UserCtrl', function ($scope, $window, AuthFactory) {
+app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory) {
 
 	$scope.isLoggedIn = false;
-
-	$scope.account = {
-		email: '',
-		password: ''
-	};
 
 	$scope.logout = () => {
 		AuthFactory.logoutUser().then(function(data){
@@ -29,13 +23,14 @@ app.controller('UserCtrl', function ($scope, $window, AuthFactory) {
 		let provider = new firebase.auth.GoogleAuthProvider();
 		firebase.auth().signInWithPopup(provider).then(function(result) {
 			var dbRef = firebase.database().ref('users');
+			var groupRef = firebase.database().ref('groups');
 			var user = result.user; 
 			var uid = result.user.uid;
 
 			dbRef.child(uid).once('value').then( function (snapshot) {
 				var exists = (snapshot.val() !== null);
 				if (exists) {
-					console.log(user.displayName + ' already exists. do nothing');
+					console.log(uid + ' already exists. do nothing');
 				} else {
 					// first time params from google
 					console.log(user.displayName + ' set-up');
@@ -45,6 +40,9 @@ app.controller('UserCtrl', function ($scope, $window, AuthFactory) {
 						photo: user.photoURL,
 						uid: uid
 					});
+					groupRef.child(uid).set({
+						groupOwner: uid
+					});
 				}
 			});
 
@@ -52,32 +50,14 @@ app.controller('UserCtrl', function ($scope, $window, AuthFactory) {
 			var token = result.credential.accessToken;
 
 	    	$scope.isLoggedIn = true;
-	    	$window.location.href = "#!/profile/";
-
+	    	console.log ($routeParams);
+	    	// console.log( $routeParams.profileId );
+	    	// $window.location.href = "#!/profile/";
+	    	$routeParams.profileId = uid;
+	    	$window.location.href = "#!/profile/" + $routeParams.profileId;
 		}).catch(function(error) {
-			console.log("error with google login", error);
+			console.log("Error with Google Login", error);
 		});
 	};
-
-  	$scope.login = () => {
-    	AuthFactory.loginUser($scope.account)
-	    .then( () => {
-	    	console.log("UserCtrl: user is loggedIn", $scope.isLoggedIn );
-	        $scope.isLoggedIn = true;
-	        $window.location.href = "#!/profile/";
-	    });
-	};
-
-	$scope.register = () => {
-	    AuthFactory.createUser({
-	      email: $scope.account.email,
-	      password: $scope.account.password
-	    }).then((userData) => {
-	      console.log('UserCtrl newUser: ', userData );
-	      $scope.login();
-	    }, (error) => {
-	        console.log('Error creating user: ', error);
-	    });
-  	};
 
 });
