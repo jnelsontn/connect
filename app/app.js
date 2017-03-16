@@ -30,19 +30,19 @@ app.config(function($routeProvider) {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
     }).
-    when('/profile', {
+ /*   when('/profile', {
+        templateUrl: 'templates/otheruserprofile.html',
+        controller: 'OtherProfileCtrl',
+        resolve: {isAuth}
+    }). */
+    when('/profile/:profileId', {
         templateUrl: 'templates/profile.html',
         controller: 'ProfileCtrl',
         resolve: {isAuth}
     }).
-    when('/profile/edit', {
+    when('/profile/:profileId/edit', {
         templateUrl: 'templates/editprofile.html',
         controller: 'ProfileCtrl',
-        resolve: {isAuth}
-    }).
-    when('/profile/:profileId', {
-        templateUrl: 'templates/otheruserprofile.html',
-        controller: 'OtherProfileCtrl',
         resolve: {isAuth}
     }).
     when('/allusers', {
@@ -64,12 +64,3 @@ app.run(($location, FBCreds) => {
     };
     firebase.initializeApp(authConfig);
 });
-
-
-/* 
-// You can retrieve services via the defaultApp variable...
-var defaultStorage = defaultApp.storage();
-var defaultDatabase = defaultApp.database();
-*/
-
-
