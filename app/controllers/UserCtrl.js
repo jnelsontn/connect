@@ -50,9 +50,6 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory)
 			var token = result.credential.accessToken;
 
 	    	$scope.isLoggedIn = true;
-	    	console.log ($routeParams);
-	    	// console.log( $routeParams.profileId );
-	    	// $window.location.href = "#!/profile/";
 	    	$routeParams.profileId = uid;
 	    	$window.location.href = "#!/profile/" + $routeParams.profileId;
 		}).catch(function(error) {

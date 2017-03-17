@@ -38,7 +38,9 @@
     <div class="col-sm-12">
 
       <ul class="chatbox">
-            <li ng-repeat="message in messages">{{ message.from }}: {{ message.content }}</li>
+            <li ng-repeat="message in messages">On {{message.timestamp}}, {{ message.from }} wrote: {{ message.content }}
+                <a href="" ng-click="messages.$remove(message)">X</a>
+            </li>
         </ul>
 
         <form ng-submit="addMessage()">
