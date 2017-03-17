@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('AllUsersListCtrl', function($scope, $window, $firebaseObject, FilterFactory) {
+app.controller('AllUsersListCtrl', function($scope, $firebaseObject) {
 
 	/* list all registered users */
 	var ref = firebase.database().ref('users');

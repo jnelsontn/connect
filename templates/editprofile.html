@@ -12,8 +12,17 @@
 
     <div class="col-sm-4">
 
-        name: <input ng-model="profile.name" ng-change="profile.$save()" type="text" /> <br />
-        e-mail: <input ng-model="profile.email" ng-change="email.$save()" type="text" />
+        <form ng-submit="saveProfile()">
+            <!--  rather not have it save on the fly
+            name: <input ng-model="profile.name" ng-change="profile.$save()" type="text" /> <br />
+            e-mail: <input ng-model="profile.email" ng-change="email.$save()" type="text" /> -->
+
+            name: <input ng-model="profile.name" type="text" /> <br />
+            e-mail: <input ng-model="profile.email" type="text" /> <br />
+            
+            <button type="submit">Save Changes</button>
+
+        </form>
 
     </div>
 

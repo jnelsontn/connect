@@ -30,11 +30,6 @@ app.config(function($routeProvider) {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
     }).
- /*   when('/profile', {
-        templateUrl: 'templates/otheruserprofile.html',
-        controller: 'OtherProfileCtrl',
-        resolve: {isAuth}
-    }). */
     when('/profile/:profileId', {
         templateUrl: 'templates/profile.html',
         controller: 'ProfileCtrl',
