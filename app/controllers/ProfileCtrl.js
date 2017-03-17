@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $firebaseArray, $firebaseStorage, $routeParams, AuthFactory) {
+app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $firebaseArray, $firebaseStorage, $routeParams, $http, AuthFactory) {
 
     // button ref. changes once it looks at promises
     $scope.connectReq = "Connect!";
@@ -114,8 +114,31 @@ app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $fireba
         console.log('watching...');
         $firebaseArray(fbGroupsDb.child(userUID).child(userLoggedIn)).$watch(function () {
             console.log($scope.profile.name + " Confirmed Your Friend Request");
+            // $window.location.href = "#!/profile/" + userUID; nah...
         });
     }
+
+    var storageRef = firebase.storage().ref(userUID).child('profile.jpg');
+    // image upload for changing profile pic...
+    $("#the-file-input").change(function(e) {
+
+        var file = e.target.files[0];
+        console.log(file);
+
+        storageRef.put(file).then(function(snapshot) {
+        console.log('Uploaded File!');
+        });
+    });
+
+    storageRef.getDownloadURL().then(function(url) {
+        console.log('Image Found');
+        var img = document.getElementById('profilephoto');
+        img.src = url;
+    }).catch(function(error) {
+        console.log('Image Not Found - Use Default');
+        var img = document.getElementById('profilephoto');
+        img.src = 'placeholder.jpg';
+    });
 
 
 });

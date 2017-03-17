@@ -4,10 +4,8 @@
 <div class="row">
 
     <div class="col-sm-4">
-
-
-    	<img src="{{profile.photo}}" width="200" height="200" class="profilephoto">
-
+        <img width="200" height="200" id="profilephoto">
+        <input id="the-file-input" type="file" value="Change Profile Picture">
     </div>
 
     <div class="col-sm-4">
@@ -19,7 +17,9 @@
 
             name: <input ng-model="profile.name" type="text" /> <br />
             e-mail: <input ng-model="profile.email" type="text" /> <br />
-            
+            description: <br />
+            <input ng-model="profile.description" type="text" /> <br />
+
             <button type="submit">Save Changes</button>
 
         </form>

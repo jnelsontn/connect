@@ -5,15 +5,19 @@
 
     <div class="col-sm-4">
 
-
-        <img src="{{profile.photo}}" width="200" height="200" class="profilephoto">
+    <!-- we need a null image here + a check if they upload one -->
+        <!-- <img src="{{profile.photo}}" width="200" height="200" class="profilephoto"> -->
+       <img width="200" height="200" id="profilephoto">
 
     </div>
 
     <div class="col-sm-4">
 
         name: {{profile.name}} <br />
-        e-mail: {{profile.email}}
+        <section ng-if="AreWeFriends === true || myOwnProfile === true">
+            e-mail: {{profile.email}} <br />
+            description: {{profile.description}}
+        <br /></section>
 
     </div>
 
@@ -22,11 +26,12 @@
     
         <button ng-if="myOwnProfile == false && AreWeFriends == false" class="btn btn-default" ng-click="connect($id)">{{connectReq}}</button> 
         <a ng-if="myOwnProfile === true" href="#!/profile/{{profile.$id}}/edit">Edit Profile</a>
-        <div ng-if="AreWeFriends == true">We are friends</div>
+        <div ng-if="AreWeFriends === true">We are friends</div>
 
     </div>
 
     <div class="col-sm-4">
+        
     </div>
 
 </div>
