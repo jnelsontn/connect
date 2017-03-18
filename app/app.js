@@ -40,6 +40,11 @@ app.config(function($routeProvider) {
         controller: 'ProfileCtrl',
         resolve: {isAuth}
     }).
+    when('/profile/:profileId/images', {
+        templateUrl: 'templates/images.html',
+        controller: 'ImagesCtrl',
+        resolve: {isAuth}
+    }).
     when('/allusers', {
         templateUrl: 'templates/alluserslist.html',
         controller: 'AllUsersListCtrl',
