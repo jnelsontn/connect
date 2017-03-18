@@ -10,15 +10,14 @@
      	</li>
 
       <li class="nav-item">
-        <a class="nav-link" ng-show="isLoggedIn" href="#!/allusers">All Users</a>
+      	<a class="nav-link" ng-show="isLoggedIn" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
       </li>
 
       <li class="nav-item">
-      	<a class="nav-link" ng-show="isLoggedIn" href="#!/music/list" disabled>Photos</a>
+        <a class="nav-link" ng-show="isLoggedIn" href="#!/allusers">All Users</a>
       </li>
 
     	<li class="nav-item">
-    		<!-- <a ng-show="!isLoggedIn" class="nav-link" href="#!/login">Login</a> -->
     		<a ng-show="isLoggedIn" class="nav-link" href="#!/logout">Logout</a>
      	</li>
 

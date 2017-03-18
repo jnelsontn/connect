@@ -4,14 +4,6 @@ app.factory('AuthFactory', function() {
 
 	let currentUser = null;
 
-	let createUser = function(userObj) {
-		return firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password);
-	};
-
-	let loginUser = function(userObj) {
-		return firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password);
-	};
-
 	let logoutUser = function() {
 		console.log("logoutUser");
 		return firebase.auth().signOut();
@@ -41,8 +33,6 @@ app.factory('AuthFactory', function() {
   	};
 
 	return {
-		createUser,
-		loginUser,
 		logoutUser,
 		isAuthenticated,
 		getUser,

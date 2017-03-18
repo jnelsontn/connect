@@ -4,8 +4,13 @@
 <div class="row">
 
     <div class="col-sm-4">
-        <img width="200" height="200" id="profilephoto">
-        <input id="the-file-input" type="file" value="Change Profile Picture">
+        <img src="{{profile.photo}}" width="200" height="200" id="profilephoto">
+        <!-- <img width="200" height="200" id="profilephoto"> -->
+
+        <br /><br />
+
+        <input id="the-file-input" type="file" accept="image/*" value="Change Profile Picture">
+
     </div>
 
     <div class="col-sm-4">

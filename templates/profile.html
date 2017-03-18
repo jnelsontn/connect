@@ -6,8 +6,8 @@
     <div class="col-sm-4">
 
     <!-- we need a null image here + a check if they upload one -->
-        <!-- <img src="{{profile.photo}}" width="200" height="200" class="profilephoto"> -->
-       <img width="200" height="200" id="profilephoto">
+        <img src="{{profile.photo}}" width="200" height="200" id="profilephoto">
+       <!-- <img width="200" height="200" id="profilephoto"> -->
 
     </div>
 
@@ -16,8 +16,10 @@
         name: {{profile.name}} <br />
         <section ng-if="AreWeFriends === true || myOwnProfile === true">
             e-mail: {{profile.email}} <br />
-            description: {{profile.description}}
-        <br /></section>
+            description: {{profile.description}} <br /><br />
+            <a href="#!/profile/{{profile.$id}}/images">View My Images</a>
+
+        </section>
 
     </div>
 
@@ -43,8 +45,8 @@
     <div class="col-sm-12">
 
       <ul class="chatbox">
-            <li ng-repeat="message in messages">On {{message.timestamp}}, {{ message.from }} wrote: {{ message.content }}
-                <a href="" ng-click="messages.$remove(message)">X</a>
+            <li ng-repeat="message in messages"><b>{{message.timestamp}} - {{ message.from }}:</b> {{ message.content }}
+                <a href="" ng-click="messages.$remove(message)">x</a>
             </li>
         </ul>
 
