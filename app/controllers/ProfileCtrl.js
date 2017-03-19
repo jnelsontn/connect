@@ -1,33 +1,33 @@
 'use strict';
 
-app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $firebaseArray, $routeParams, AuthFactory, ConnectFactory) {
+app.controller('ProfileCtrl', function($scope, $window, $timeout, $firebaseObject, $firebaseArray, $routeParams, AuthFactory, ConnectFactory) {
 
     // button ref. changes once it looks at promises
     $scope.connectReq = "Connect!";
 
-	let userLoggedIn = AuthFactory.getUser();
-	$scope.userLoggedIn = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
+    let userLoggedIn = AuthFactory.getUser();
+    $scope.visitorRealName = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
 
-	// userUID is the profile we're visiting
-	let userUID = $routeParams.profileId;
-    let userUidDbRef = ConnectFactory.fbUserDb.child(userUID);
-    $scope.profile = $firebaseObject(userUidDbRef);
+    // userUID is the profile we're visiting
+    let userUID = $routeParams.profileId;
+
+    $firebaseObject(ConnectFactory.fbUserDb.child(userUID)).$loaded().then(function(x) {
+        $scope.profile = x;
+    });
 
     // the messageDB of the user whose profile we're visiting
- 	let messageRef = ConnectFactory.fbMessagesDb.child(userUID);
-    $scope.messages = $firebaseArray(messageRef);
+    $firebaseArray(ConnectFactory.fbMessagesDb.child(userUID)).$loaded().then(function(x) {
+        $scope.messages = x;
+    });
 
-    $scope.addMessage = () => {
-        var date = new Date(); // this probably sets the ts in the db to the user's computer date ;)
-        var message = {
+    $scope.addMessage = function(){
+        var date = new Date();
+        $scope.messages.$add({
             timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
-            uid: userLoggedIn,
-            from: $scope.userLoggedIn.name,
+            from: $scope.visitorRealName.name,
             content: $scope.message
-        };
-        var messageKey = messageRef.push().key;
-        $scope.message = "";
-        return messageRef.child(messageKey).update(message);
+        });
+        $scope.message = '';
     };
 
     // we need firebase rules to prevent user from editing other profile
@@ -86,18 +86,22 @@ app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $fireba
         if (you && they) {
             console.log('We Are Friends');
             $scope.AreWeFriends = true;
+            $scope.$apply();
             // we should push to an array of friends here but we'll also need the logic
             // to remove a friend from the array
         } else if ((you === true) && (they === false)) {
             console.log('You sent a request. They have not responded.');
             $scope.connectReq = "Request Pending";
+            $scope.$apply();
             watchChange();
         } else if ((you === false) && (they === true)) {
             $scope.connectReq = "Respond to Request";
+            $scope.$apply();
             console.log('They sent you a request. You have not responded.');
         } else if ((you === undefined) && (they === undefined)) {
             console.log('You are on your profile.');
         } else {
+            $scope.$apply();
             console.log('We Are Not Friends and no requests have been sent.');
         }
     });
@@ -106,7 +110,6 @@ app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $fireba
         console.log('watching...');
         $firebaseArray(ConnectFactory.fbGroupsDb.child(userUID).child(userLoggedIn)).$watch(function () {
             console.log($scope.profile.name + " Confirmed Your Friend Request");
-            // $window.location.href = "#!/profile/" + userUID; nah...
         });
     }
 
@@ -130,19 +133,5 @@ app.controller('ProfileCtrl', function($scope, $window, $firebaseObject, $fireba
 
     });
 
-
-    // could we just set the .set photo property rather than do all this?
-   /* profileRef.getDownloadURL().then(function(url) {
-        console.log(url);
-        console.log('Profile Image Found');
-        var img = document.getElementById('profilephoto');
-        img.src = url;
-
-    }).catch(function(error) {
-        console.log('Image Not Found - Use Default');
-        var img = document.getElementById('profilephoto');
-        img.src = 'placeholder.jpg';
-    }); */
-
-
 });
+
