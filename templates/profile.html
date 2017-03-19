@@ -16,8 +16,8 @@
         name: {{profile.name}} <br />
         <section ng-if="AreWeFriends === true || myOwnProfile === true">
             e-mail: {{profile.email}} <br />
-            description: {{profile.description}} <br /><br />
-            <a href="#!/profile/{{profile.$id}}/images">View My Images</a>
+            description: {{profile.description}} <br />
+            <a href="#!/profile/{{profile.uid}}/images">View {{profile.name}}'s Images</a>
 
         </section>
 
@@ -26,15 +26,21 @@
     <div class="col-sm-4">
 
     
-        <button ng-if="myOwnProfile == false && AreWeFriends == false" class="btn btn-default" ng-click="connect($id)">{{connectReq}}</button> 
-        <a ng-if="myOwnProfile === true" href="#!/profile/{{profile.$id}}/edit">Edit Profile</a>
-        <div ng-if="AreWeFriends === true">We are friends</div>
-
-    </div>
-
-    <div class="col-sm-4">
+        <button ng-if="myOwnProfile == false && AreWeFriends == false" class="btn btn-default" ng-click="connect(uid)">{{connectReq}}</button> 
         
+        <a ng-if="myOwnProfile === true" href="#!/profile/{{profile.uid}}/edit">Edit Profile</a>
+
+        <div ng-if="AreWeFriends === true">
+            We are friends
+        </div>
+
+        <div ng-if="AreWeFriends === true || myOwnProfile === true">
+            <p ng-if="isOnline === true">{{profile.name}} is online</p>
+            <p ng-if="isOnline === false">{{profile.name}} is offline</p>
+        </div>
+
     </div>
+
 
 </div>
 
@@ -44,17 +50,23 @@
 
     <div class="col-sm-12">
 
-      <ul class="chatbox">
-            <li ng-repeat="message in messages"><b>{{message.timestamp}} - {{ message.from }}:</b> {{ message.content }}
+      <!-- <section ng-if="AreWeFriends === true || myOwnProfile === true"> -->
+
+        <ul class="chatbox">
+
+            <li ng-repeat="message in messages">
+                <b>{{message.timestamp}} - {{ message.from }}:</b> {{ message.content }}
                 <a href="" ng-click="messages.$remove(message)">x</a>
             </li>
         </ul>
 
         <form ng-submit="addMessage()">
-            <input type="text" ng-model="message">
-            <input type="submit" value="Add Message">
+            <input ng-model="message"> 
+            <button type="submit">Add Message</button>
         </form>
-        
-    </div>
 
+        </section>
+
+    </div>
+        
 </div>

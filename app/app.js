@@ -5,12 +5,11 @@ var app = angular.module('Connect', ['ngRoute', 'firebase']);
 //used to authenticate user when navigating to other views
 let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
     AuthFactory.isAuthenticated().then ( (userExists) => {
-    // console.log("userExists", userExists);
         if (userExists){
-            // console.log("Authenticated, go ahead.");
+            //console.log("Authenticated, go ahead.");
             resolve();
         } else {
-            // console.log("Authentication rejected, go away.");
+            //console.log("Authentication rejected, go away.");
             reject();
         }
     });

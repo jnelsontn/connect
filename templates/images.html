@@ -1,16 +1,14 @@
 <br />
 
-<section ng-if="myOwnProfile === true">
-    <input id="image-upload" type="file" accept="image/*" value="Change Profile Picture"> <br /><br />
+<section ng-if="myOwnProfile">
+    <input id="image-upload" type="file" accept="image/*"> <br /><br />
 </section>
 
 <div class="row">
-    <div ng-repeat="image in images">
 
-        <div class="col-sm-4">
-            <img ng-src="{{image.photo}}" height="200" width="200" onclick="window.open(this.src)">
-        </div>
-
+	<div class="col-sm-3" ng-repeat="image in images">
+		<img ng-src="{{image.photo}}" height="200" width="200" onclick="window.open(this.src)"> <br />
+		<a href="" ng-click="images.$remove(image)">delete image</a>
     </div>
 
 </div>

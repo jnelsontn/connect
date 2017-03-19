@@ -1,7 +1,7 @@
 <!-- Static NavBar -->
 <div class="collapse navbar-collapse" id="navbarSupportedContent" ng-controller="NavCtrl">
 
-<a class="navbar-brand" href="#">CONNECT</a>
+<p class="navbar-brand">CONNECT</p>
 
 	<ul class="navbar-nav mr-auto">
 
@@ -21,11 +21,13 @@
     		<a ng-show="isLoggedIn" class="nav-link" href="#!/logout">Logout</a>
      	</li>
 
-    </ul>
+  </ul>
 
-    <form class="form-inline my-2 my-lg-0" ng-show="isLoggedIn">
+<p class="navbar-brand">Users Online: {{usersOnline}}</p>
+
+    <!-- <form ng-show="isLoggedIn">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> -->
 
 </div>

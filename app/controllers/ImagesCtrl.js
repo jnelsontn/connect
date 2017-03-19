@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ImagesCtrl', function($scope, $routeParams, $firebaseObject, AuthFactory, ConnectFactory) {
+app.controller('ImagesCtrl', function($scope, $routeParams, $firebaseArray, AuthFactory, ConnectFactory) {
 
 let userUID = $routeParams.profileId;
 let userLoggedIn = AuthFactory.getUser();
@@ -15,29 +15,26 @@ let userLoggedIn = AuthFactory.getUser();
 
 // root -> images -> uid -> obj-ref
 let fbImageDb = firebase.database().ref('images').child(userUID);
-$scope.images = $firebaseObject(fbImageDb);
+$scope.images = $firebaseArray(fbImageDb);
 
     // image upload for changing profile pic...
   $("#image-upload").change(function(e) {
-
+    $scope.myOwnProfile = true;
+    $scope.$apply();
     var file = e.target.files[0];
+    var imageRef = firebase.storage().ref(userUID).child(file.name);
     console.log(file);
 
-    let imageRef = firebase.storage().ref(userUID).child(file.name);
     imageRef.put(file).then(function(snapshot) {
-    console.log('Uploaded File!');
-
+      console.log('Uploaded File!');
       imageRef.getDownloadURL().then(function(url) {
-        console.log('is this working?', url);
         fbImageDb.push({
           photo: url
         });
+
       });
 
     });
-
-  });
-
-console.log($scope.images);
+  }); /* end img upload */
 
 });
