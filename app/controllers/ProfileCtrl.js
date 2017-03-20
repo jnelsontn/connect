@@ -1,15 +1,24 @@
 'use strict';
 
-app.controller('ProfileCtrl', function($scope, $window, $timeout, $firebaseObject, $firebaseArray, $routeParams, AuthFactory, ConnectFactory) {
-
-    // button ref. changes once it looks at promises
-    $scope.connectReq = "Connect!";
+app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObject, $firebaseArray, $routeParams, AuthFactory, ConnectFactory) {
 
     let userLoggedIn = AuthFactory.getUser();
-    $scope.visitorRealName = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
-
-    // userUID is the profile we're visiting
+    let date = new Date();
     let userUID = $routeParams.profileId;
+    let profileRef = firebase.storage().ref(userUID).child('profile.jpg');
+
+    $scope.visitorRealName = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
+    $scope.connectReqText = "Connect!";
+    $scope.respondReqText = "Respond to Request";
+    $scope.isOnline = false;
+    $scope.myOwnProfile = false;
+    $scope.AreWeFriends = false;
+    $scope.button_clicked = false;
+    $scope.respondReq = false;
+
+    if (userLoggedIn === userUID) {
+        $scope.myOwnProfile = true;
+    }
 
     $firebaseObject(ConnectFactory.fbUserDb.child(userUID)).$loaded().then(function(x) {
         $scope.profile = x;
@@ -20,46 +29,20 @@ app.controller('ProfileCtrl', function($scope, $window, $timeout, $firebaseObjec
         $scope.messages = x;
     });
 
-    $scope.addMessage = function(){
-        var date = new Date();
-        $scope.messages.$add({
-            timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
-            from: $scope.visitorRealName.name,
-            content: $scope.message
-        });
-        $scope.message = '';
-    };
+    $firebaseArray(ConnectFactory.fbStatusUpdatesDb.child(userUID)).$loaded().then(function(x) {
+        $scope.updates = x;
+    });
 
-    // we need firebase rules to prevent user from editing other profile
-    $scope.myOwnProfile = false;
-    if (userLoggedIn === userUID) {
-        $scope.myOwnProfile = true;
-    }
-
-    $scope.saveProfile = function() {
-        $scope.profile.$save().then(function() {
-            console.log('Profile saved!');
-            $window.location.href = "#!/profile/" + userUID;
-        }).catch(function(error) {
-            console.log('Error Editing Profile');
-        });
-    };
-
-    if (userLoggedIn !== userUID) {
-        // shouldn't see button but just in case...
-        $scope.connect = () => {
-            // my userid -> and set key in there for who they want to visit
-            console.log('Sent ' + $scope.profile.name + ' a connection request.');
-            return ConnectFactory.fbGroupsDb.child(userLoggedIn).child(userUID).set(
-            { // connected: true isn't relevant but firebase doesn't allow an empty obj...
-                connected: true
-            }); 
-       };
-    }
+    ConnectFactory.fbPresenceDb.child(userUID).once('value', function(snap) {
+        if (snap.exists()) {
+            $scope.isOnline = true;
+            console.log(userUID + ' is online');
+        }
+     });
 
     var didYouRequest = ConnectFactory.fbGroupsDb.child(userLoggedIn).child(userUID).once('value').then( function (snapshot) {
-        if (userLoggedIn !== userUID) { // don't check if we added ourselves... we can't
-            if (snapshot.val() !== null) {
+        if (userLoggedIn !== userUID) {
+            if (snapshot.exists()) {
                 console.log('Did You Send Request? : Yes');
                 return true;
             } else {
@@ -70,8 +53,8 @@ app.controller('ProfileCtrl', function($scope, $window, $timeout, $firebaseObjec
     });
 
     var didTheyRequest = ConnectFactory.fbGroupsDb.child(userUID).child(userLoggedIn).once('value').then( function (snapshot) {
-        if (userLoggedIn !== userUID) {
-            if (snapshot.val() !== null) {
+       if (userLoggedIn !== userUID) {
+            if (snapshot.exists()) {
                 console.log('Have they requested You? : Yes');
                 return true;
             } else {
@@ -81,39 +64,119 @@ app.controller('ProfileCtrl', function($scope, $window, $timeout, $firebaseObjec
         }
     });
 
-    $scope.AreWeFriends = false;
-    Promise.all([didYouRequest, didTheyRequest]).then(function([you, they]) {
-        if (you && they) {
-            console.log('We Are Friends');
+    $q.all([didYouRequest, didTheyRequest]).then(function([you, they]) {
+        // console.log(you, they);
+        if ((you === true) && (they === true)) {
             $scope.AreWeFriends = true;
-            $scope.$apply();
-            // we should push to an array of friends here but we'll also need the logic
-            // to remove a friend from the array
+            console.log('We are Friends?', $scope.AreWeFriends);
+            //watchChange();
         } else if ((you === true) && (they === false)) {
             console.log('You sent a request. They have not responded.');
-            $scope.connectReq = "Request Pending";
-            $scope.$apply();
-            watchChange();
+            //watchChange();
+            $scope.connectReqText = "Request Pending";
+            $scope.button_clicked = true;
         } else if ((you === false) && (they === true)) {
-            $scope.connectReq = "Respond to Request";
-            $scope.$apply();
+            $scope.respondReq = true;
             console.log('They sent you a request. You have not responded.');
+            // watchChange();
         } else if ((you === undefined) && (they === undefined)) {
             console.log('You are on your profile.');
+            $scope.myOwnProfile = true;
         } else {
-            $scope.$apply();
             console.log('We Are Not Friends and no requests have been sent.');
         }
     });
 
+    $scope.respondToRequest = () => {
+        ConnectFactory.fbGroupsDb.child(userLoggedIn).child(userUID).set(
+        { // Not used by Firebase does not allow an empty 'object'
+            connected: true
+        });
+        $route.reload();
+    };
+
+    $scope.connect = () => {
+        if (userLoggedIn !== userUID) {
+
+            ConnectFactory.fbGroupsDb.child(userLoggedIn).child(userUID).set(
+            { // Not used by Firebase does not allow an empty 'object'
+                connected: true
+            });
+            watchChange();
+
+          /*  var ref = ConnectFactory.fbMessagesDb.child(userUID);
+            var obj = {
+                timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+                from: $scope.visitorRealName.name,
+                content: 'Sent You A Friend Request, click to confirm'
+            };
+            ref.push(obj); */
+
+            //sendUidReq = (uidSent, msg)
+            var msg = $scope.visitorRealName.name + ' Sent You A Friend Request';
+            // person we sent to, person sent from, msg
+            ConnectFactory.sendUidReq(userUID, userLoggedIn, msg);
+
+            $scope.connectReqText = "Request Pending";
+            $scope.button_clicked = true;
+        } /* enduserloggedin */
+    };
+
+    $scope.addMessage = function(){
+        $scope.messages.$add({
+            timestamp: date.toLocaleString(),
+            from: $scope.visitorRealName.name,
+            content: $scope.message
+        });
+        $scope.message = '';
+        if (userLoggedIn !== userUID) {
+            var x = $scope.visitorRealName.name + ' wrote on your profile.';
+            ConnectFactory.sendUidReq(userUID, userLoggedIn, x);
+        }
+    };
+
+    $scope.userUpdateStatus = function(){
+        if (userLoggedIn === userUID) {
+            $scope.updates.$add({
+                timestamp: date.toLocaleString(),
+                from: $scope.profile.name,
+                content: $scope.update
+            });
+            $scope.update = '';
+        }
+        /* $scope.message = '';
+        if (userLoggedIn !== userUID) {
+            var x = $scope.visitorRealName.name + ' wrote on your profile.';
+            ConnectFactory.sendUidReq(userUID, userLoggedIn, x);
+        } */
+    };
+
+/*                 // person we send to, person sent from, msg
+                ConnectFactory.sendUidReq(userLoggedIn, userUID, msg); */
+
+    $scope.saveProfile = function() {
+        $scope.profile.$save().then(function() {
+            console.log('Profile saved!');
+            $window.location.href = "#!/profile/" + userUID;
+        }).catch(function(error) {
+            console.log('Error Editing Profile');
+        });
+    };
+
+    // UserLoggedIn gets this message sent back when userUID confirms
     function watchChange() {
-        console.log('watching...');
-        $firebaseArray(ConnectFactory.fbGroupsDb.child(userUID).child(userLoggedIn)).$watch(function () {
-            console.log($scope.profile.name + " Confirmed Your Friend Request");
+        console.log('Waiting for Other User to Accept Connection Request');
+        ConnectFactory.fbGroupsDb.child(userUID).child(userLoggedIn).on('value', function (snap) {
+            if (snap.exists()) {
+                // console.log(snap.val());
+                console.log($scope.profile.name + ' Confirmed Request');
+                var msg = $scope.profile.name + ' Confirmed Request';
+                // person we send to, person sent from, msg
+                ConnectFactory.sendUidReq(userLoggedIn, userUID, msg);
+            }
         });
     }
 
-    var profileRef = firebase.storage().ref(userUID).child('profile.jpg');
     // image upload for changing profile pic...
     $("#the-file-input").change(function(e) {
 

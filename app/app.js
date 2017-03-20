@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('Connect', ['ngRoute', 'firebase']);
+var app = angular.module('Connect', ['ngRoute', 'firebase', 'ui.bootstrap']);
 
 //used to authenticate user when navigating to other views
 let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
@@ -42,6 +42,11 @@ app.config(function($routeProvider) {
     when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',
         controller: 'ImagesCtrl',
+        resolve: {isAuth}
+    }).
+    when('/profile/:profileId/notifications', {
+        templateUrl: 'templates/notifications.html',
+        controller: 'NotificationsCtrl',
         resolve: {isAuth}
     }).
     when('/allusers', {

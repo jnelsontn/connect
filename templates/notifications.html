@@ -1,0 +1,17 @@
+<br />
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="list-group form-control msg-update-boxes bg-faded">
+            <b>Status Updates:</b> <br />
+            <li ng-repeat="notice in notifications | orderBy:'timestamp':true">
+                <p>
+                    <b>{{notice.timestamp}}:</b>
+                    {{ notice.content }}
+                    <a href="" ng-click="notifications.$remove(notice)">(remove notification)</a>
+                </p>
+            <br />
+            </li>
+            <p ng-show="!notifications.length">No Recent Updates</p>
+            </ul>
+    </div>
+</div>

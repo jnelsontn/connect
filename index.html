@@ -13,23 +13,27 @@
 
 </head>
 
-<body ng-app="Connect">
+<body ng-app="Connect" class="text-muted">
 
-	<nav ng-include="'templates/navbar.html'" class="navbar navbar-toggleable-md navbar-light bg-faded"></nav>
+	<!-- <nav ng-include="'templates/navbar.html'" class="navbar navbar-toggleable-md navbar-light bg-faded"></nav> -->
+	<div ng-include="'templates/navbar.html'"></div>
 
-	<div class="container">
-
+	<div class="container-fluid">
 		<div ng-view></div>
-
 	</div>
 
 
-<script type="text/javascript" src="lib/node_modules/firebase/firebase.js"></script>
+
+<script type="text/javascript" src="dist/firebase.js"></script>
 <script type="text/javascript" src="dist/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="dist/bootstrap.min.js"></script> -->
 <script type="text/javascript" src="dist/angular.min.js"></script>
 <script type="text/javascript" src="dist/angular-route.min.js"></script>
 <script type="text/javascript" src="dist/angularfire.min.js"></script>
+
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
+
 
 <script type="text/javascript" src="app/app.js"></script>
 <script type="text/javascript" src="app/values/fb-creds.js"></script>
@@ -43,6 +47,7 @@
 <script type="text/javascript" src="app/controllers/ProfileCtrl.js"></script>
 <script type="text/javascript" src="app/controllers/ImagesCtrl.js"></script>
 <script type="text/javascript" src="app/controllers/AllUsersListCtrl.js"></script>
+<script type="text/javascript" src="app/controllers/NotificationsCtrl.js"></script>
 
 </body>
 </html>

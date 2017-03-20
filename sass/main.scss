@@ -1,3 +1,32 @@
-#profilephoto {
-	border: 1px solid black;
+body {
+	padding-top: 70px;
+	font-size: 12px;
+}
+
+nav {
+	border-bottom: 1px solid grey;
+}
+
+/* start Status Update/Send Message display Boxes */
+.msg-update-boxes {
+	padding: 5px;
+	font-size: 0.8rem;
+	color: gray; 
+}
+
+.msg-update-boxes li {
+	list-style: none;
+}
+
+.msg-update-boxes p {
+	padding: 5px;
+}
+/* end Status Update/Send Message display Boxes */
+
+.online {
+	color: green;
+}
+
+.offline {
+	color: red;
 }

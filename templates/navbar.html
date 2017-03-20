@@ -1,33 +1,39 @@
 <!-- Static NavBar -->
-<div class="collapse navbar-collapse" id="navbarSupportedContent" ng-controller="NavCtrl">
+<nav class="navbar navbar-toggleable-md fixed-top navbar-light bg-faded" ng-controller="NavCtrl">
 
-<p class="navbar-brand">CONNECT</p>
+    <a class="navbar-brand">CONNECT</a>
+<!-- mr-auto allows the span to go to the other end -->
+    <ul class="navbar-nav mr-auto" ng-show="isLoggedIn">
 
-	<ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
+         </li>
 
-    	<li class="nav-item">
-    		<a class="nav-link" ng-show="isLoggedIn" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
-     	</li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
+        </li>
 
-      <li class="nav-item">
-      	<a class="nav-link" ng-show="isLoggedIn" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/notifications"> Notifications ({{notificationNumber}})</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" ng-show="isLoggedIn" href="#!/allusers">All Users</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/allusers">All Users</a>
+        </li>
 
-    	<li class="nav-item">
-    		<a ng-show="isLoggedIn" class="nav-link" href="#!/logout">Logout</a>
-     	</li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/logout">Logout</a>
+         </li>
 
-  </ul>
+    </ul>
 
-<p class="navbar-brand">Users Online: {{usersOnline}}</p>
+    <span class="navbar-text" ng-show="isLoggedIn">Users Online: {{usersOnline}} </span>
 
-    <!-- <form ng-show="isLoggedIn">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
+    <!-- will move to ui.bootstrap modal -->    
+    <span class="navbar-text" ng-show="isLoggedIn" ng-repeat="notice in notifications">
+        | Notice:
+        <a ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
+        <a href="" ng-click="notifications.$remove(notice)">x</a>
+    </span>
 
-</div>
+</nav>
