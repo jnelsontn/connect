@@ -32,26 +32,47 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
         if (x.exists()) { $scope.isOnline = true; }
      });
 
-    // Func. Expression for 'Connection' Request.
-    let didYouRequest = ConnectFactory.didYouRequest(userLoggedIn, userUID);
-    let didTheyRequest = ConnectFactory.didTheyRequest(userUID, userLoggedIn);
-
-    let completeRequest = $q.all([didYouRequest, didTheyRequest]).then(([you, they]) => {
+    // Func. Expression(s) for 'Connection' Request.
+    let yourConnReq = ConnectFactory.didYouRequest(ConnectFactory.fbGroupsDb, userLoggedIn, userUID);
+    let theirConnReq = ConnectFactory.didTheyRequest(ConnectFactory.fbGroupsDb, userUID, userLoggedIn);
+    let completeConnReq = $q.all([yourConnReq, theirConnReq]).then(([you, they]) => {
         if (you && they) {
             $scope.AreWeConnected = true;
             console.log('We are Connected: ', $scope.AreWeConnected);
         } else if (you && !they) {
             $scope.connectReqText = 'Request Pending';
             $scope.button_clicked = true;
-            console.log('You sent a request. They have not responded.');
+            console.log('You sent a Connection request. They have not responded.');
         } else if (!you && they) {
             $scope.respondReq = true;
-            console.log('They sent you a request. You have not responded.');
+            console.log('They sent you a Connection request. You have not responded.');
         } else if ((you === undefined) && (they === undefined)) {
             $scope.myOwnProfile = true;
-            console.log('Your Own Profile');
+            console.log('Your are on your own Profile');
         } else {
             console.log('We are not Connected.');
+        }
+    });
+
+    // Func. Expression(s) for 'Relationship' Request
+    let yourRelReq = ConnectFactory.didYouRequest(ConnectFactory.fbRelationshipsDb, userLoggedIn, userUID);
+    let theirRelReq = ConnectFactory.didTheyRequest(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn);
+    let completeRelReq = $q.all([yourRelReq, theirRelReq]).then(([you, they]) => {
+        if (you && they) {
+            //$scope.AreWeConnected = true;
+            console.log('We are in a relationship: ', $scope.AreWeConnected);
+        } else if (you && !they) {
+            // $scope.connectReqText = 'Request Pending';
+            //$scope.button_clicked = true;
+            console.log('You sent a relationship request. They have not responded.');
+        } else if (!you && they) {
+            //$scope.respondReq = true;
+            console.log('They sent you a relationship request. You have not responded.');
+        } else if ((you === undefined) && (they === undefined)) {
+            $scope.myOwnProfile = true;
+            console.log('You are on your own Profile.');
+        } else {
+            console.log('We are not in a relationship.');
         }
     });
 

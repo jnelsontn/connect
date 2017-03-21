@@ -71,6 +71,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
         });
     };
 
+    // I can make this into one function and just add/more parameters... 
     let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
 	    if (document.querySelector(imageId)) {
 	        let newProfilePhotoId = document.querySelector(imageId);
