@@ -1,31 +1,36 @@
 <br />
 
 <div class="row">
-	<div class="offset-sm-1"></div>
 	<div class="col-sm-4" ng-show="myOwnProfile">
-
-	<form class="input-group">
-		<input class="form-control" id="image-upload" type="file" accept="image/*">
-	</form>
-
+		<div class="form-control msg-update-boxes bg-faded">
+			<b>Upload New Photo:</b>
+			<label class="input-group">
+		  		<input type="file" id="image-upload" class="custom-file-input" accept="image/*">
+		  		<span class="custom-file-control"></span>
+			</label>
+		</div>
 	</div>
 </div>
 
 <br />
 
 <div class="row">
+    <div class="col-sm-12">
+        <div class="form-control msg-update-boxes bg-faded">
+            <b>Photos</b> (click to enlarge):<br />
 
-	<div class="offset-sm-1"></div>
-	<div class="col-sm-10 bg-faded list-group form-control">
-
-		<div class="row msg-update-boxes" style="margin:5px;">
-
-			<div class="col-sm-4" ng-repeat="image in images">
-				<img ng-src="{{image.photo}}" height="200" width="200" onclick="window.open(this.src)"> <br />
-				<a ng-show="myOwnProfile" href="" ng-click="images.$remove(image)">delete image</a> <br /> <br />
-			</div>
-	    </div>
-
-	</div>
-
+            <div class="row">
+            	<div ng-repeat="photo in photos">            
+	                <div class="col-sm-3 photos-margin-left">
+	                    <img ng-src="{{photo.photo}}" width="300" height="300" class="rounded" onclick="window.open(this.src)">
+	                    <br />
+	                    <a ng-show="myOwnProfile" href="" ng-click="photos.$remove(photo)">Delete Photo</a> <br />
+	                </div>
+                </div>
+         	</div><br />
+			<p ng-show="!photos.length">No Photos</p>
+        </div>
+    </div>
 </div>
+
+<br /><br /> <!-- keep these -->

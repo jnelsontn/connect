@@ -1,42 +1,65 @@
 <br />
 
-<section ng-repeat="friend in friendList">
-    <div class="row">
 
-        <div class="col-sm-4">
-            <img src="{{friend.photo}}" width="100" height="100" id="profilephoto">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-control msg-update-boxes bg-faded">
+            <b>Connections:</b> <br /><br />
+
+            <div class="row" ng-repeat="connection in connectedList">
+
+                <div class="offset-sm-1"></div>
+                <div class="col-sm-3">
+                    <img src="{{connection.photo}}" width="150" height="150" class="rounded profile-photo profile-photo-mini">
+                </div>
+
+                <div class="col-sm-6">
+                    {{connection.name}} <br /> 
+                    <a ng-href="mailto:{{connection.email}}">{{connection.email}} <br />
+
+                    <br />
+                    <a ng-href="#!/profile/{{connection.uid}}">View Profile</a>
+                </div>
+
+                <div class="col-sm-2">
+                    <!-- online status ? -->
+                </div>
+            </div>
+            <p ng-show="!connectedList.length">
+                You have no Connections.
+            </p>
         </div>
+    </div>
+</div>
 
-        <div class="col-sm-4">
-            name: {{friend.name}} <br />
-            e-mail: {{friend.email}} <br />
+<br />
 
-            <a ng-href="#!/profile/{{friend.uid}}">View Profile</a>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-control msg-update-boxes bg-faded">
+            <b>Not Connected:</b> <br /><br />
+
+            <div class="row" ng-repeat="stranger in notConnectedList">
+
+                <div class="offset-sm-1"></div>
+                <div class="col-sm-3">
+                    <img src="{{stranger.photo}}" width="150" height="150" class="rounded profile-photo profile-photo-mini">
+                </div>
+
+                <div class="col-sm-6">
+                    {{stranger.name}} <br /><br />
+                    <a ng-href="#!/profile/{{stranger.uid}}">View Profile</a>
+                </div>
+
+                <div class="col-sm-2">
+                    
+                </div>
+            </div>
+            <p ng-show="!notConnectedList.length">
+                You are Connected with all Users.
+            </p>
         </div>
+    </div>
+</div>
 
-        <div class="col-sm-4">
-        Connection
-        </div>
-
-    </div><br /><br />
-</section>
-
-<section ng-repeat="stranger in notFriendList">
-    <div class="row">
-
-        <div class="col-sm-4">
-            <img src="{{stranger.photo}}" width="100" height="100" id="profilephoto">
-        </div>
-
-        <div class="col-sm-4">
-            name: {{stranger.name}} <br />
-
-            <a ng-href="#!/profile/{{stranger.uid}}">View Profile</a>
-        </div>
-
-        <div class="col-sm-4">
-        Not A Connection
-        </div>
-
-    </div><br /><br />
-</section> 
+<br /><br /> <!-- keep these -->

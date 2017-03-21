@@ -6,29 +6,25 @@ let userUID = $routeParams.profileId;
 let userLoggedIn = AuthFactory.getUser();
 let imageDb = ConnectFactory.fbImagesDb.child(userUID);
 
-$scope.images = $firebaseArray(imageDb);
+$scope.photos = $firebaseArray(imageDb);
 $scope.myOwnProfile = false;
 
-	if (userLoggedIn === userUID) {
-		console.log('my images');
-		$scope.myOwnProfile = true;
-	} else {
-		console.log('not my images');
-	}
+	if (userLoggedIn === userUID) { $scope.myOwnProfile = true; }
 
-	$("#image-upload").change(function(e) {
-		var file = e.target.files[0];
-		var imageRef = firebase.storage().ref(userUID).child(file.name);
-		console.log(file);
+	let imageUploadId = document.getElementById('image-upload');
+	if (imageUploadId) {
+		imageUploadId.addEventListener('change', (e) => {
+			let file = e.target.files[0];
+			let imageRef = firebase.storage().ref(userUID).child(file.name);
+			console.log('File Properties: ', file);
 
-		imageRef.put(file).then(function(snapshot) {
-			console.log('Uploaded File!');
-			imageRef.getDownloadURL().then(function(url) {
-				imageDb.push({
-					photo: url
+			imageRef.put(file).then(() => {
+				console.log('Successfully Uploaded File!');
+				imageRef.getDownloadURL().then((url) => {
+					imageDb.push({ photo: url });
 				});
 			});
-		});
-	}); /* end img upload */
+		}); 
+	}/* end img upload */
 
 });

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 app.factory('ConnectFactory', function() {
 
@@ -12,19 +12,16 @@ app.factory('ConnectFactory', function() {
     let fbStatusUpdatesDb = firebase.database().ref('updates');
 
     let date = new Date();
-
     let sendUidReq = (uidTo, uidFrom, msg) => {
-		var obj = {
+		let obj = {
 			timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
-			// person we are sending notification to
 			uidTo: uidTo,
 			uidFrom: uidFrom,
 			content: msg,
 		};
-		var x = fbNotificationDb.child(uidTo);
+		let x = fbNotificationDb.child(uidTo);
     	x.push(obj);
     };
-
 
 	return {
 		fbUserDb,

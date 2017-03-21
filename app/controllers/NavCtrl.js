@@ -1,60 +1,60 @@
-"use strict";
+'use strict';
 
-app.controller('NavCtrl', function($scope, $window, $firebaseObject, $firebaseArray, AuthFactory, ConnectFactory, FilterFactory) {
-	$scope.searchText = FilterFactory;
+app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, ConnectFactory) {
 	$scope.isLoggedIn = false;
 
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebase.auth().onAuthStateChanged((user) => {
     	if (user) {
         	$scope.isLoggedIn = true;
             $scope.userLoggedInProfile = user.uid;
 
-            var listRef = ConnectFactory.fbPresenceDb.child(user.uid);
-            var userRef = listRef.push();
+            let listRef = ConnectFactory.fbPresenceDb.child(user.uid);
+            let userRef = listRef.push();
 
-            // Add ourselves to presence list when online.
-            var presenceRef = firebase.database().ref('.info/connected');
-            presenceRef.on("value", function(snap) {
-                if (snap.val()) {
-                // Remove ourselves when we disconnect.
+            // Add Ourselves to Presence List while Online
+            let presenceRef = firebase.database().ref('.info/connected');
+            presenceRef.on('value', (x) => {
+                if (x.exists()) {
+                // Remove Ourselves on Disconnect.
                     userRef.onDisconnect().remove();
                     userRef.set(true);
                 }
             });
 
             // Number of Users Online
-            ConnectFactory.fbPresenceDb.on('value', function(snap) {
-                $scope.$evalAsync(function() {
-                    $scope.usersOnline = snap.numChildren();
+            ConnectFactory.fbPresenceDb.on('value', (x) => {
+                $scope.$evalAsync(() => {
+                    $scope.usersOnline = x.numChildren();
                 });
             });
             
-            /* only show one result in our notification window */
-            var rootRef = firebase.database().ref('notifications/' + user.uid);
-            var limitedRootRef = rootRef.limitToLast(1);
-            $firebaseArray(limitedRootRef).$loaded().then(function(x) {
+            // Pull user's notifications and display in a 'Toast.'
+            let rootRef = firebase.database().ref('notifications/' + user.uid);
+            let limitedRootRef = rootRef.limitToLast(1);
+            $firebaseArray(limitedRootRef).$loaded().then((x) => {
                 $scope.notifications = x;
-            });
-
-            var notifChrldCnt = rootRef.on('value', function(x) {
-                $scope.$evalAsync(function() {
-                    $scope.notificationNumber = x.numChildren();
+                ngToast.create({
+                    content: '{{notice.content}}',
+                    compileContent: true,
+                    className: 'alert alert-info'
                 });
             });
 
+            // Number of User's Online
+            let notifChrldCnt = rootRef.on('value', (x) => {
+                $scope.$evalAsync(() => {
+                    $scope.notificationNumber = x.numChildren();
+                });
+            });
     	} else {
             $scope.isLoggedIn = false;
-            $window.location.href = "#!/login";
+            $window.location.href = '#!/login';
     	}
-
-    }); /* end fb auth */
+    }); // End Authorization
 
 });
 
-/*      firebase.database().ref('notifications/' + user.uid).on('value', function(snap){
-        $scope.$apply(function(){
-          console.log(snap.val());
-          $scope.notifications = snap.val();
-        });
 
-      }); */
+
+
+

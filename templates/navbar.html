@@ -1,8 +1,8 @@
 <!-- Static NavBar -->
-<nav class="navbar navbar-toggleable-md fixed-top navbar-light bg-faded" ng-controller="NavCtrl">
+<nav class="navbar navbar-nav navbar-light navbar-toggleable-xl fixed-top bg-faded" ng-controller="NavCtrl">
 
-    <a class="navbar-brand">CONNECT</a>
-<!-- mr-auto allows the span to go to the other end -->
+    <a class="navbar-brand" style="padding-left: 5px;">CONNECT</a>
+
     <ul class="navbar-nav mr-auto" ng-show="isLoggedIn">
 
         <li class="nav-item">
@@ -25,15 +25,13 @@
             <a class="nav-link" href="#!/logout">Logout</a>
          </li>
 
+         <li class="nav-link" ng-repeat="notice in notifications">
+            | New Notification: <a  ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
+            <a ng-href="" ng-click="notifications.$remove(notice)">(x)</a>
+         </li>
     </ul>
 
-    <span class="navbar-text" ng-show="isLoggedIn">Users Online: {{usersOnline}} </span>
-
-    <!-- will move to ui.bootstrap modal -->    
-    <span class="navbar-text" ng-show="isLoggedIn" ng-repeat="notice in notifications">
-        | Notice:
-        <a ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
-        <a href="" ng-click="notifications.$remove(notice)">x</a>
-    </span>
-
+    <span class="navbar-text" ng-show="isLoggedIn">Users Online: <b>{{usersOnline}}</b></span>
+    <toast ng-show="isLoggedIn" ng-repeat="notice in notifications"></toast>
+    
 </nav>
