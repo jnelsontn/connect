@@ -7,7 +7,7 @@ app.factory('AuthFactory', function($q) {
 	let logoutUser = () => { return firebase.auth().signOut(); };
 
 	let isAuthenticated = () => {
-		return $q((resolve, reject) => {
+		return $q((resolve) => {
 			firebase.auth().onAuthStateChanged((user) => {
 				if (user) {
 					currentUser = user.uid;
@@ -26,11 +26,6 @@ app.factory('AuthFactory', function($q) {
 
 	let authWithProvider = () => { return firebase.auth().signInWithPopup(provider); };
 
-	return {
-		logoutUser,
-		isAuthenticated,
-		getUser,
-		authWithProvider
-	};
+	return { logoutUser, isAuthenticated, getUser, authWithProvider };
 
 });

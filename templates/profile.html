@@ -5,16 +5,25 @@
     <div class="offset-md-3"></div>
     
     <div class="col-md-3">
-        <img src="{{profile.photo}}" width="250" height="250" id="profilephoto" class="rounded profile-photo"> <br />
+        <img src="{{profile.photo}}" width="250" height="250" id="profilephoto" class="rounded profile-photo" alt="Profile Photo"> 
+        <br />
         <a ng-show="myOwnProfile" href="#!/profile/{{profile.uid}}/edit">Edit Profile</a>
     </div>
 
     <div class="col-md-3">
 
-        <section class="body-font-color" ng-show="AreWeConnected">We're Connected!</section>
+        <section class="body-font-color" ng-show="AreWeConnected">
+
+            We're Connected! | 
+            <a href="" confirmed-click="removeConnection()" ng-confirm-click="Confirm Remove Connection?">
+            Remove Connection</a>
+
+        </section>
+       
+        <!-- non-Connections can only see User's name -->
         <section class="body-font-color">{{profile.name}}</section>
 
-        <!-- friends only (or user's profile) -->
+        <!-- Connections only (or own Profile) -->
         <section ng-show="myOwnProfile || AreWeConnected" class="body-font-color">
             <a ng-href="mailto:{{profile.email}}">{{profile.email}}</a> <br /> <br />
 
@@ -28,11 +37,14 @@
             </div>
 
             <a href="#!/profile/{{profile.uid}}/images">View Photos</a>
-        </section> <!-- end friends only -->
+        </section> <!-- end Connections only -->
 
         <br />
+
+        <!-- Request Connection Button -->
         <button ng-show="!myOwnProfile && !AreWeConnected" ng-hide="(myOwnProfile && !respondReq) || respondReq" class="btn btn-secondary bg-faded btn-sm" ng-click="button_clicked || connect(uid)" ng-disabled="button_clicked">{{connectReqText}}</button>
 
+        <!-- Confirm Connection Button -->
         <button ng-show="respondReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToRequest(uid)">{{respondReqText}}</button>
 
     </div>
@@ -49,7 +61,7 @@
     <section ng-show="myOwnProfile || AreWeConnected">
 
         <!-- Start Status Updates -->
-            <section ng-show="myOwnProfile">
+            <section ng-show="myOwnProfile"><!-- write status updates-->
                 <form class="input-group" ng-submit="userUpdateStatus()">
                     <input type="text" class="form-control" placeholder="Update Your Status" ng-model="update">
                     <span class="input-group-btn">
@@ -61,7 +73,7 @@
             <br />
 
             <ul class="list-group form-control bg-faded msg-update-boxes">
-                <b>Status Updates:</b> <br />
+                <b>Status Updates:</b> <br /> <!-- show posted status updates -->
                 <li ng-repeat="update in updates | orderBy:'timestamp':true">
                     <b>{{update.timestamp}}:</b>
                     <a ng-show="myOwnProfile" href="" ng-click="updates.$remove(update)">(remove)</a>
@@ -73,7 +85,7 @@
             <br />
 
         <!-- Start Messages -->
-            <form class="input-group" ng-submit="addMessage()">
+            <form class="input-group" ng-submit="addMessage()"> <!-- add message box -->
                 <input type="text" class="form-control" placeholder="Add a Message" ng-model="message">
                 <span class="input-group-btn">
                     <button class="btn btn-secondary bg-faded" type="submit">Send Message</button>
@@ -83,7 +95,7 @@
             <br />
 
             <ul class="list-group form-control bg-faded msg-update-boxes">
-                <b>Messages:</b> <br />
+                <b>Messages:</b> <br /> <!-- show posted messages -->
                 <li ng-repeat="message in messages | orderBy:'timestamp':true">
                     <b>{{message.timestamp}}. {{ message.from }} wrote:</b>
                     <a ng-show="myOwnProfile" href="" ng-click="messages.$remove(message)">(remove)</a>

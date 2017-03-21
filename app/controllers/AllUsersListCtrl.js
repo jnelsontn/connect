@@ -2,8 +2,8 @@
 
 app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectFactory, AuthFactory) {
 
-	// Pull a List of *ALL* Users, Split into two Groups (Connections, Non-Connections), 
-	// Remove the Current User's Listing and Display to the Current User.
+	// Pull a list of *ALL* Users, Split into two Groups (Connections, Non-Connections), 
+	// Remove the Current User's Listing and Display results to the Current User.
 
 	let userLoggedIn = AuthFactory.getUser();
     let allUsersArray = $firebaseArray(ConnectFactory.fbUserDb);
@@ -34,18 +34,15 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 				}
 			});
 
-	        combinedArr.push(
+	        let finalPush = combinedArr.push(
 	            $q.all([haveIAdded, haveTheyAdded]).then(([you, they]) => {
 	                if (you && they) {
 	                    connectedArr.push(allUsersArray[i]);
-	                    //console.log('friend: ', allUsersArray[i]);
 	                } else {
-	                	//console.log('not Friend', allUsersArray[i]);
 	                    notConnectedArr.push(allUsersArray[i]);
 	                }
 
 	               	if (allUsersArray[i].uid === userLoggedIn) {
-	               		// console.log(allUsersArray[i].uid);
 						notConnectedArr.pop();
 	        		}
 			}));

@@ -1,6 +1,4 @@
-<!doctype html>
-
-<html lang="en">
+<!doctype html><html lang="en">
 
 <head>
 
@@ -9,34 +7,40 @@
 	<title>Connect</title>
 
 	<script type="text/javascript" src="dist/js/angular.min.js"></script>
+
 	<link href="dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
 	<link href="dist/css/ngToast.min.css" rel="stylesheet" type="text/css" >
+	<!-- only edit main.css -->
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 
 </head>
 
 <body ng-app="Connect" class="text-muted">
 
+	<!-- fixed angular navbar -->
 	<div ng-include="'templates/navbar.html'"></div>
+	<!-- handled in app.js by $routeProvider -->
+	<div class="container-fluid"><div ng-view></div></div>
 
-	<div class="container-fluid">
-		<div ng-view></div>
-	</div>
-
-
-
+<!-- Required Modules -->
 <script type="text/javascript" src="dist/js/firebase.js"></script>
 <script type="text/javascript" src="dist/js/angular-route.min.js"></script>
 <script type="text/javascript" src="dist/js/angularfire.min.js"></script>
 <script type="text/javascript" src="dist/js/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="dist/js/ngToast.min.js"></script>
 
+<!-- Initialize Module -->
 <script type="text/javascript" src="app/app.js"></script>
 <script type="text/javascript" src="app/values/fb-creds.js"></script>
 
+<!-- Factories -->
 <script type="text/javascript" src="app/factories/AuthFactory.js"></script>
 <script type="text/javascript" src="app/factories/ConnectFactory.js"></script>
 
+<!-- Directive -->
+<script type="text/javascript" src="app/directives/ng-really.js"></script>
+
+<!-- Controllers -->
 <script type="text/javascript" src="app/controllers/NavCtrl.js"></script>
 <script type="text/javascript" src="app/controllers/UserCtrl.js"></script>
 <script type="text/javascript" src="app/controllers/ProfileCtrl.js"></script>
@@ -44,8 +48,7 @@
 <script type="text/javascript" src="app/controllers/AllUsersListCtrl.js"></script>
 <script type="text/javascript" src="app/controllers/NotificationsCtrl.js"></script>
 
-</body>
-</html>
+</body></html>
 
 
 
