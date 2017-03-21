@@ -38,7 +38,7 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 				}
 			});
 
-	    	console.log("User Logged In: ", uid);
+			console.log("User Logged In: ", uid);
 			let token = result.credential.accessToken;
 
 	    	$scope.isLoggedIn = true;

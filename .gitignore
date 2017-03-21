@@ -1,5 +1,6 @@
 lib/.sass-cache/
 lib/node_modules
 app/values/fb-creds.js
+sass/main.scss
 sass/
 .DS_Store

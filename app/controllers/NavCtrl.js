@@ -5,7 +5,7 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
 
     firebase.auth().onAuthStateChanged((user) => {
     	if (user) {
-        	$scope.isLoggedIn = true;
+            $scope.isLoggedIn = true;
             $scope.userLoggedInProfile = user.uid;
 
             let listRef = ConnectFactory.fbPresenceDb.child(user.uid);

@@ -6,14 +6,14 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let fbUserDb = firebase.database().ref('users');
 	let fbMessagesDb = firebase.database().ref('messages');
 	let fbImagesDb = firebase.database().ref('images');
-    let fbGroupsDb = firebase.database().ref('groups');
-    let fbPresenceDb = firebase.database().ref('presence');
-    let fbNotificationDb = firebase.database().ref('notifications');
-    let fbStatusUpdatesDb = firebase.database().ref('updates');
-    let date = new Date();
+	let fbGroupsDb = firebase.database().ref('groups');
+	let fbPresenceDb = firebase.database().ref('presence');
+	let fbNotificationDb = firebase.database().ref('notifications');
+	let fbStatusUpdatesDb = firebase.database().ref('updates');
+	let date = new Date();
 
     let didYouRequest = (userLoggedIn, userUID) => {
-    	return $q((resolve, reject) => {
+    	return $q(resolve => {
 	    	fbGroupsDb.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
@@ -29,7 +29,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
     };
 
     let didTheyRequest = (userUID, userLoggedIn) => {
-    	return $q((resolve, reject) => {
+    	return $q(resolve => {
 			fbGroupsDb.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
