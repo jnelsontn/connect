@@ -1,21 +1,38 @@
 'use strict';
 
-var app = angular.module('Connect', ['ngRoute', 'firebase']);
+var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast']);
 
 //used to authenticate user when navigating to other views
-let isAuth = (AuthFactory) => new Promise ( (resolve, reject) => {
-    AuthFactory.isAuthenticated().then ( (userExists) => {
-        if (userExists){
-            //console.log("Authenticated, go ahead.");
-            resolve();
+let isAuth = ($q, AuthFactory) => {
+    return $q((resolve, reject) => {
+        AuthFactory.isAuthenticated().then ((userExists) => {
+            if (userExists){
+                // console.log('Authenticated.');
+                resolve();
+            } else {
+                // console.log('Not Authenticated.');
+                reject();
+            }
+        });
+    });
+};
+
+// Do not allow someone to edit another individual's profile
+// bug? if user is on someone else's profile... they sometimes need to reauth
+let pageAuth = ($q, AuthFactory, $routeParams) => {
+    return $q((resolve, reject) => {
+        let currentUser = AuthFactory.getUser();
+        let currentUrl = $routeParams.profileId;
+        if (currentUser === currentUrl) {
+            resolve(true);
         } else {
-            //console.log("Authentication rejected, go away.");
-            reject();
+            console.log(currentUser + ' does not match ' + currentUrl);
+            reject(false);
         }
     });
-});
+};
 
-app.config(function($routeProvider) {
+app.config(($routeProvider) => {
     $routeProvider.
     when('/', {
         templateUrl: 'templates/login.html',
@@ -37,7 +54,12 @@ app.config(function($routeProvider) {
     when('/profile/:profileId/edit', {
         templateUrl: 'templates/editprofile.html',
         controller: 'ProfileCtrl',
-        resolve: {isAuth}
+        resolve: {isAuth, pageAuth}
+    }).
+    when('/profile/:profileId/notifications', {
+        templateUrl: 'templates/notifications.html',
+        controller: 'NotificationsCtrl',
+        resolve: {isAuth, pageAuth}
     }).
     when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',
@@ -50,6 +72,14 @@ app.config(function($routeProvider) {
         resolve: {isAuth}
     });
 });
+
+app.config(['ngToastProvider', (ngToast) => {
+    ngToast.configure({
+      verticalPosition: 'bottom',
+      horizontalPosition: 'right',
+      maxNumber: 1
+    });
+}]);
 
 // Start Firebase Credentials
 app.run(($location, FBCreds) => {

@@ -1,65 +1,60 @@
 'use strict';
 
-app.controller('AllUsersListCtrl', function($scope, $firebaseObject, $firebaseArray, $timeout, ConnectFactory, AuthFactory) {
+app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectFactory, AuthFactory) {
 
-	/*
-		this controller displays all the users from the database and splits them into two arrays
-		1. your friends 2. non friends. 3. It excludes your own user profile from the list.
-		Obviously if the DB had a lot of users this would not be ideal
-	 */
+	// Pull a List of *ALL* Users, Split into two Groups (Connections, Non-Connections), 
+	// Remove the Current User's Listing and Display to the Current User.
 
 	let userLoggedIn = AuthFactory.getUser();
-    var allUsersArray = $firebaseArray(ConnectFactory.fbUserDb);
-	var x = ConnectFactory.fbGroupsDb;
+    let allUsersArray = $firebaseArray(ConnectFactory.fbUserDb);
+	let x = ConnectFactory.fbGroupsDb;
 
-	allUsersArray.$loaded().then(function(){
-	    var promises = [];
-	    var friendArr = [];
-	    var notFriendArr = [];
+	allUsersArray.$loaded().then(() => {
+	    let combinedArr = [];
+	    let connectedArr = [];
+	    let notConnectedArr = [];
 
-	    angular.forEach(allUsersArray, function(user, i) {
+	    angular.forEach(allUsersArray, (user, i) => {
 
-		   	var haveIAdded = x.child(userLoggedIn).child(allUsersArray[i].uid).once('value').then(function (snap) {
-				if (snap.val() !== null) {
+		   	let haveIAdded = x.child(userLoggedIn).child(allUsersArray[i].uid).once('value')
+		   	.then((x) => {
+				if (x.exists()) {
 					return true;
 				} else {
 					return false;
 				}
 			});
 		            
-			var haveTheyAdded = x.child(allUsersArray[i].uid).child(userLoggedIn).once('value').then(function (snap) {
-				if (snap.val() !== null) {
+			let haveTheyAdded = x.child(allUsersArray[i].uid).child(userLoggedIn).once('value')
+			.then((x) => {
+				if (x.exists()) {
 					return true;
 				} else {
 				    return false; 
 				}
 			});
 
-	        promises.push(
-	            Promise.all([haveIAdded, haveTheyAdded]).then(function([you, they]) {
+	        combinedArr.push(
+	            $q.all([haveIAdded, haveTheyAdded]).then(([you, they]) => {
 	                if (you && they) {
-	                    friendArr.push(allUsersArray[i]);
+	                    connectedArr.push(allUsersArray[i]);
+	                    //console.log('friend: ', allUsersArray[i]);
 	                } else {
-	                    notFriendArr.push(allUsersArray[i]);
+	                	//console.log('not Friend', allUsersArray[i]);
+	                    notConnectedArr.push(allUsersArray[i]);
 	                }
 
 	               	if (allUsersArray[i].uid === userLoggedIn) {
-						notFriendArr.pop();
+	               		// console.log(allUsersArray[i].uid);
+						notConnectedArr.pop();
 	        		}
-
-	            })
-	        );
-
+			}));
 	    });
-
-	    Promise.all(promises).then(function(){
-	       $scope.friendList = friendArr;
-	       $scope.notFriendList = notFriendArr;
-	       $scope.$apply();
-	    });
+		$scope.connectedList = connectedArr;
+		$scope.notConnectedList = notConnectedArr;
 	});
 
-
-
 });
+
+
 

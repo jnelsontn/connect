@@ -4,37 +4,27 @@ app.controller('ImagesCtrl', function($scope, $routeParams, $firebaseArray, Auth
 
 let userUID = $routeParams.profileId;
 let userLoggedIn = AuthFactory.getUser();
+let imageDb = ConnectFactory.fbImagesDb.child(userUID);
 
-  $scope.myOwnProfile = false;
-  if (userLoggedIn === userUID) {
-    console.log('my images');
-    $scope.myOwnProfile = true;
-  } else {
-    console.log('not my images');
-  }
+$scope.photos = $firebaseArray(imageDb);
+$scope.myOwnProfile = false;
 
-// root -> images -> uid -> obj-ref
-let fbImageDb = firebase.database().ref('images').child(userUID);
-$scope.images = $firebaseArray(fbImageDb);
+	if (userLoggedIn === userUID) { $scope.myOwnProfile = true; }
 
-    // image upload for changing profile pic...
-  $("#image-upload").change(function(e) {
-    $scope.myOwnProfile = true;
-    $scope.$apply();
-    var file = e.target.files[0];
-    var imageRef = firebase.storage().ref(userUID).child(file.name);
-    console.log(file);
+	let imageUploadId = document.getElementById('image-upload');
+	if (imageUploadId) {
+		imageUploadId.addEventListener('change', (e) => {
+			let file = e.target.files[0];
+			let imageRef = firebase.storage().ref(userUID).child(file.name);
+			console.log('File Properties: ', file);
 
-    imageRef.put(file).then(function(snapshot) {
-      console.log('Uploaded File!');
-      imageRef.getDownloadURL().then(function(url) {
-        fbImageDb.push({
-          photo: url
-        });
-
-      });
-
-    });
-  }); /* end img upload */
+			imageRef.put(file).then(() => {
+				console.log('Successfully Uploaded File!');
+				imageRef.getDownloadURL().then((url) => {
+					imageDb.push({ photo: url });
+				});
+			});
+		}); 
+	}/* end img upload */
 
 });

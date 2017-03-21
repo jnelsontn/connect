@@ -1,33 +1,37 @@
 <!-- Static NavBar -->
-<div class="collapse navbar-collapse" id="navbarSupportedContent" ng-controller="NavCtrl">
+<nav class="navbar navbar-nav navbar-light navbar-toggleable-xl fixed-top bg-faded" ng-controller="NavCtrl">
 
-<p class="navbar-brand">CONNECT</p>
+    <a class="navbar-brand" style="padding-left: 5px;">CONNECT</a>
 
-	<ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto" ng-show="isLoggedIn">
 
-    	<li class="nav-item">
-    		<a class="nav-link" ng-show="isLoggedIn" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
-     	</li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
+         </li>
 
-      <li class="nav-item">
-      	<a class="nav-link" ng-show="isLoggedIn" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" ng-show="isLoggedIn" href="#!/allusers">All Users</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/notifications"> Notifications ({{notificationNumber}})</a>
+        </li>
 
-    	<li class="nav-item">
-    		<a ng-show="isLoggedIn" class="nav-link" href="#!/logout">Logout</a>
-     	</li>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/allusers">All Users</a>
+        </li>
 
-  </ul>
+        <li class="nav-item">
+            <a class="nav-link" href="#!/logout">Logout</a>
+         </li>
 
-<p class="navbar-brand">Users Online: {{usersOnline}}</p>
+         <li class="nav-link" ng-repeat="notice in notifications">
+            | New Notification: <a  ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
+            <a ng-href="" ng-click="notifications.$remove(notice)">(x)</a>
+         </li>
+    </ul>
 
-    <!-- <form ng-show="isLoggedIn">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
-
-</div>
+    <span class="navbar-text" ng-show="isLoggedIn">Users Online: <b>{{usersOnline}}</b></span>
+    <toast ng-show="isLoggedIn" ng-repeat="notice in notifications"></toast>
+    
+</nav>

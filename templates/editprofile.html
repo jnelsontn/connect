@@ -2,46 +2,61 @@
 <br />
 
 <div class="row">
-
-    <div class="col-sm-4">
-        <img src="{{profile.photo}}" width="200" height="200" id="profilephoto">
+    <div class="offset-md-3"></div>
+    
+    <div class="col-md-3">
+        <img src="{{profile.photo}}" width="250" height="250" id="profilephoto" class="rounded profile-photo"> <br />
 
         <br /><br />
 
-        <input id="the-file-input" type="file" accept="image/*">
-
+        <div class="col-md-9 form-control msg-update-boxes bg-faded">
+            <b>Change Profile Photo:</b>
+            <label class="input-group">
+                <input type="file" id="the-file-input" class="custom-file-input" accept="image/*">
+                <span class="custom-file-control"></span>
+            </label>
+        </div>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-md-6">
+            <form ng-submit="saveProfile()">
 
-        <form ng-submit="saveProfile()">
-            <!--  rather not have it save on the fly
-            name: <input ng-model="profile.name" ng-change="profile.$save()" type="text" /> <br />
-            e-mail: <input ng-model="profile.email" ng-change="email.$save()" type="text" /> -->
+            <div class="form-group row">
+                <div class="col-6">
+                    <input class="form-control" type="text" ng-model="profile.name" id="edit-name-input" />
+                </div>
+            </div>
 
-            name: <input ng-model="profile.name" type="text" /> <br />
-            e-mail: <input ng-model="profile.email" type="text" /> <br />
-            description: <br />
-            <input ng-model="profile.description" type="text" /> <br />
+            <div class="form-group row">
+                <div class="col-6">
+                    <input class="form-control" type="email" ng-model="profile.email" id="edit-email-input" />
+                </div>
+            </div>
 
-            <button type="submit">Save Changes</button>
+            <div class="form-group row">
+                <div class="col-6">
+                    <textarea class="form-control" ng-model="profile.description" id="edit-about-input" rows="4" /></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary bg-faded" type="submit">Save Changes</button>
 
         </form>
-
-    </div>
-
-    <div class="col-sm-4">
-    	Editing Mode
     </div>
 
 </div>
 
-<br><br>
 
-<div class="row">
+<br /><br /> <!-- keep these -->
 
-	<div class="col-sm-12">
 
-	</div>
 
-</div>
+
+
+
+
+
+
+
+
+

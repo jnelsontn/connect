@@ -1,3 +1,82 @@
-#profilephoto {
-	border: 1px solid black;
+body {
+	padding-top: 70px;
+	font-size: 12px;
 }
+
+nav {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+a {
+	color: rgba(0, 0, 0, 0.5) !important;
+}
+
+a:focus {
+	color: rgba(0, 0, 0, 0.7) !important;
+}
+
+a:hover {
+	color: rgba(0, 0, 0, 0.9) !important;
+	text-decoration: underline !important;
+}
+
+.body-font-color {
+	color: rgba(0, 0, 0, 0.5) !important;
+}
+
+// Override Bootstrap 4 'glow' on input bar
+.form-control:focus {
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Not Sure Yet
+.form-control {
+	border-color: rgba(0, 0, 0, 0.5) !important;
+} */
+
+// Used to indent-left after a header.
+.paddingleft {
+	padding-left: 5px;
+}
+
+// profile photo
+.profile-photo {
+	border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+// msg-update-boxes class: used for repeating elements - e.g status updates, wall posts
+.msg-update-boxes {
+	padding: 5px;
+	font-size: 0.8rem;
+	color: gray; 
+}
+
+.msg-update-boxes li {
+	list-style: none;
+}
+
+.msg-update-boxes p {
+	padding: 5px;
+}
+
+/* Class: User Online Status */
+.online {
+	color: green;
+}
+
+.offline {
+	color: red;
+}
+
+/* Used on images.html imagesCtrl */
+.photos-margin-left {
+	margin: 10px;
+}
+
+/* alluserslist page */
+.profile-photo-mini {
+	margin-bottom: 5px;
+}
+
+
+

@@ -1,36 +1,30 @@
-"use strict";
+'use strict';
 
-app.factory('AuthFactory', function() {
+app.factory('AuthFactory', function($q) {
 
 	let currentUser = null;
 
-	let logoutUser = function() {
-		console.log("logoutUser");
-		return firebase.auth().signOut();
-	};
+	let logoutUser = () => { return firebase.auth().signOut(); };
 
-	let isAuthenticated = function () {
-		return new Promise (function (resolve, reject) {
-			firebase.auth().onAuthStateChanged(function (user) {
+	let isAuthenticated = () => {
+		return $q((resolve, reject) => {
+			firebase.auth().onAuthStateChanged((user) => {
 				if (user) {
 					currentUser = user.uid;
 					resolve(true);
 				} else {
+					console.log('No User Authenticated.');
 					resolve(false);
 				}
 			});
 		});
 	};
 
-	let getUser = function() {
-		return currentUser;
-	};
+	let getUser = () => { return currentUser; };
 
 	let provider = new firebase.auth.GoogleAuthProvider();
 
-	let authWithProvider = function() {
-    	return firebase.auth().signInWithPopup(provider);
-  	};
+	let authWithProvider = () => { return firebase.auth().signInWithPopup(provider); };
 
 	return {
 		logoutUser,
