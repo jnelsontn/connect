@@ -2,7 +2,7 @@
 
 var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast']);
 
-//used to authenticate user when navigating to other views
+// Ensure User is Authenticated for Viewing Pages
 let isAuth = ($q, AuthFactory) => {
     return $q((resolve, reject) => {
         AuthFactory.isAuthenticated().then ((userExists) => {
@@ -17,8 +17,7 @@ let isAuth = ($q, AuthFactory) => {
     });
 };
 
-// Do not allow someone to edit another individual's profile
-// bug? if user is on someone else's profile... they sometimes need to reauth
+// Only Profile Owner May Edit
 let pageAuth = ($q, AuthFactory, $routeParams) => {
     return $q((resolve, reject) => {
         let currentUser = AuthFactory.getUser();
@@ -26,47 +25,39 @@ let pageAuth = ($q, AuthFactory, $routeParams) => {
         if (currentUser === currentUrl) {
             resolve(true);
         } else {
-            console.log(currentUser + ' does not match ' + currentUrl);
+            console.log('No!' + currentUser + ' does not match ' + currentUrl);
             reject(false);
         }
     });
 };
 
 app.config(($routeProvider) => {
-    $routeProvider.
-    when('/', {
+    $routeProvider.when('/', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).
-    when('/login', {
+    }).when('/login', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).
-    when('/logout', {
+    }).when('/logout', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).
-    when('/profile/:profileId', {
+    }).when('/profile/:profileId', {
         templateUrl: 'templates/profile.html',
         controller: 'ProfileCtrl',
         resolve: {isAuth}
-    }).
-    when('/profile/:profileId/edit', {
+    }).when('/profile/:profileId/edit', {
         templateUrl: 'templates/editprofile.html',
         controller: 'ProfileCtrl',
         resolve: {isAuth, pageAuth}
-    }).
-    when('/profile/:profileId/notifications', {
+    }).when('/profile/:profileId/notifications', {
         templateUrl: 'templates/notifications.html',
         controller: 'NotificationsCtrl',
         resolve: {isAuth, pageAuth}
-    }).
-    when('/profile/:profileId/images', {
+    }).when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',
         controller: 'ImagesCtrl',
         resolve: {isAuth}
-    }).
-    when('/allusers', {
+    }).when('/allusers', {
         templateUrl: 'templates/alluserslist.html',
         controller: 'AllUsersListCtrl',
         resolve: {isAuth}

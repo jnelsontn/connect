@@ -40,12 +40,13 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
                 });
             });
 
-            // Number of User's Online
+            // Number of Notifications for a User
             let notifChrldCnt = rootRef.on('value', (x) => {
                 $scope.$evalAsync(() => {
                     $scope.notificationNumber = x.numChildren();
                 });
             });
+
     	} else {
             $scope.isLoggedIn = false;
             $window.location.href = '#!/login';
