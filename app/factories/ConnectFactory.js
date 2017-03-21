@@ -10,11 +10,13 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let fbPresenceDb = firebase.database().ref('presence');
 	let fbNotificationDb = firebase.database().ref('notifications');
 	let fbStatusUpdatesDb = firebase.database().ref('updates');
+	let fbRelationshipsDb = firebase.database().ref('relationships');
 	let date = new Date();
 
-    let didYouRequest = (userLoggedIn, userUID) => {
+	// 'Connection' Request
+    let didYouRequest = (database, userLoggedIn, userUID) => {
     	return $q(resolve => {
-	    	fbGroupsDb.child(userLoggedIn).child(userUID).once('value').then((x) => {
+	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
 		                console.log('Did You Send Request? : Yes');
@@ -27,10 +29,10 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    	});
 	    });
     };
-
-    let didTheyRequest = (userUID, userLoggedIn) => {
+    // fbGroupsDb - standard for users. ConnectFactory.fbGroupsDb
+    let didTheyRequest = (database, userUID, userLoggedIn) => {
     	return $q(resolve => {
-			fbGroupsDb.child(userUID).child(userLoggedIn).once('value').then((x) => {
+			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
 		                console.log('Have they requested You? : Yes');
@@ -43,6 +45,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    	});
 		});
 	};
+	// End 'Connection' Request	
 
     let sendUidReq = (uidTo, uidFrom, msg) => {
 		let obj = {
@@ -109,7 +112,8 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		}
 	};
 
-	return { fbUserDb, fbMessagesDb, fbImagesDb, fbGroupsDb, fbPresenceDb, fbStatusUpdatesDb,
-		sendUidReq, watchChange, didYouRequest, didTheyRequest, changeSpecificPhoto, imageUpload };
+	return { fbUserDb, fbMessagesDb, fbImagesDb, fbGroupsDb, fbPresenceDb, fbStatusUpdatesDb, 
+		fbRelationshipsDb, didYouRequest, didTheyRequest, sendUidReq, watchChange, 
+		changeSpecificPhoto, imageUpload };
 
 });
