@@ -6,7 +6,7 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 	// Remove the Current User's Listing and Display results to the Current User.
 
 	let userLoggedIn = AuthFactory.getUser();
-    let allUsersArray = $firebaseArray(ConnectFactory.fbUserDb);
+	let allUsersArray = $firebaseArray(ConnectFactory.fbUserDb);
 	let x = ConnectFactory.fbGroupsDb;
 
 	allUsersArray.$loaded().then(() => {
