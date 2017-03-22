@@ -35,29 +35,36 @@ app.config(($routeProvider) => {
     $routeProvider.when('/', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).when('/login', {
+    }).
+    when('/login', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).when('/logout', {
+    }).
+    when('/logout', {
         templateUrl: 'templates/login.html',
         controller: 'UserCtrl'
-    }).when('/profile/:profileId', {
+    }).
+    when('/profile/:profileId', {
         templateUrl: 'templates/profile.html',
         controller: 'ProfileCtrl',
         resolve: {isAuth}
-    }).when('/profile/:profileId/edit', {
+    }).
+    when('/profile/:profileId/edit', {
         templateUrl: 'templates/editprofile.html',
         controller: 'ProfileCtrl',
         resolve: {isAuth, pageAuth}
-    }).when('/profile/:profileId/notifications', {
+    }).
+    when('/profile/:profileId/notifications', {
         templateUrl: 'templates/notifications.html',
         controller: 'NotificationsCtrl',
         resolve: {isAuth, pageAuth}
-    }).when('/profile/:profileId/images', {
+    }).
+    when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',
         controller: 'ImagesCtrl',
         resolve: {isAuth}
-    }).when('/allusers', {
+    }).
+    when('/allusers', {
         templateUrl: 'templates/alluserslist.html',
         controller: 'AllUsersListCtrl',
         resolve: {isAuth}

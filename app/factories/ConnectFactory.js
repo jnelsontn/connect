@@ -19,26 +19,26 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                console.log('Did You Send Request? : Yes');
+		                // console.log('Did You Send Request? : Yes');
 		                resolve(true);
 		            } else {
-		                console.log('Did You Send Request? : No');
+		                // console.log('Did You Send Request? : No');
 		                resolve(false); 
 		            }
 	        	}
 	    	});
 	    });
     };
-    // fbGroupsDb - standard for users. ConnectFactory.fbGroupsDb
+
     let didTheyRequest = (database, userUID, userLoggedIn) => {
     	return $q(resolve => {
 			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                console.log('Have they requested You? : Yes');
+		                // console.log('Have they requested You? : Yes');
 		                resolve(true);
 		            } else {
-		                console.log('Have they requested You? : No');
+		                // console.log('Have they requested You? : No');
 		                resolve(false);
 		            }
 		        }
@@ -58,10 +58,11 @@ app.factory('ConnectFactory', function($location, $route, $q) {
     	x.push(obj);
     };
 
-    let watchChange = (userUID, userLoggedIn, realName) => {
-        fbGroupsDb.child(userUID).child(userLoggedIn).on('value', (x) => {
+    // When a Request is Sent -- We wait for the Response
+    let watchChange = (database, userUID, userLoggedIn, realName) => {
+        database.child(userUID).child(userLoggedIn).on('value', (x) => {
             if (x.exists()) {
-                // console.log($scope.profile.name + ' Confirmed Request');
+            	console.log(database);
                 let msg = realName + ' Confirmed Request';
                 sendUidReq(userLoggedIn, userUID, msg);
 
@@ -71,7 +72,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
         });
     };
 
-    // I can make this into one function and just add/more parameters... 
+    // Used to Change a specific photo
     let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
 	    if (document.querySelector(imageId)) {
 	        let newProfilePhotoId = document.querySelector(imageId);
@@ -93,6 +94,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    }
     };
 
+    // Used to Upload User Photos
 	let imageUpload = (imageId, userUID, imageDb) => {
 		if (document.querySelector(imageId)) {
 			let imageUploadId = document.querySelector(imageId);
