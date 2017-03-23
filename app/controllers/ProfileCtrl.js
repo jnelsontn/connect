@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $firebaseObject, $firebaseArray, 
-    $routeParams, AuthFactory, ConnectFactory) {
+app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObject, $firebaseArray, 
+    $routeParams, AuthFactory, ConnectFactory, ngToast) {
 
     let userLoggedIn = AuthFactory.getUser();
     let userUID = $routeParams.profileId;
@@ -11,7 +11,7 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
     $scope.visitorProfile = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
     $scope.messages = $firebaseArray(ConnectFactory.fbMessagesDb.child(userUID));
     $scope.updates = $firebaseArray(ConnectFactory.fbStatusUpdatesDb.child(userUID));
-    $scope.relationshipData = $firebaseObject(ConnectFactory.fbRelationshipsDb.child(userUID));
+    $scope.relationshipData = $firebaseArray(ConnectFactory.fbRelationshipsDb.child(userUID));
 
     $scope.myOwnProfile = false;
     $scope.isOnline = false;
@@ -74,8 +74,6 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
                     } else if (!yourRel && theyRel) {
                         $scope.respondRelReq = true;
                         console.log('They sent you a relationship request. You have not responded.');
-                    } else {
-                        console.log('You are not in a relationship with this person.');
                     }
                 });
             // Not Connected & No Relationship continue
@@ -88,7 +86,7 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
                 console.log('They sent you a Connection request. You have not responded.');
             } else if ((you === undefined) && (they === undefined)) {
                 $scope.myOwnProfile = true;
-                console.log('Your are on your own Profile');
+                console.log('You are on your own Profile');
             } else {
                 console.log('We are not Connected.');
             }
@@ -129,17 +127,23 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
     // Relationship Request, Response & Remove
     $scope.relationshipRequest = () => {
         if (userLoggedIn !== userUID) {
-            $scope.relationship_button_clicked = true;
-            ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).set({ 
-                relationship: true,
-                partneruid: $scope.profile.uid,
-                partner: $scope.profile.name
+            ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
+                if (x.exists()) { // Make Modal Here too 
+                    console.log('You are already in a relationship!');
+                    // ngToast.create('You are already in a Relationship!');
+                } else {
+                    $scope.relationship_button_clicked = true;
+                    ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).set({ 
+                        relationship: true,
+                        partneruid: $scope.profile.uid,
+                        partner: $scope.profile.name
+                    });
+                    // Reciever, Sender, Message
+                    let msg = $scope.visitorProfile.name + ' Sent You A Relationship Request';
+                    ConnectFactory.sendUidReq(userUID, userLoggedIn, msg);
+                    ConnectFactory.watchChange(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn, $scope.profile.name);
+                }
             });
-
-            // Reciever, Sender, Message
-            let msg = $scope.visitorProfile.name + ' Sent You A Relationship Request';
-            ConnectFactory.sendUidReq(userUID, userLoggedIn, msg);
-            ConnectFactory.watchChange(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn, $scope.profile.name);
         }
     };
 
@@ -193,8 +197,6 @@ app.controller('ProfileCtrl', function($scope, $location, $window, $q, $route, $
                 console.log('Profile Saved!');
                 $window.location.href = '#!/profile/' + userUID;
             });
-        } else {
-            $window.location.href = '#!/profile/' + userLoggedIn;
         }
     };
     

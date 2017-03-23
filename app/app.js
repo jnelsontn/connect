@@ -18,6 +18,8 @@ let isAuth = ($q, AuthFactory) => {
 };
 
 // Only Profile Owner May Edit
+// this creates a bug - when viewing another's profile
+// and then navigating to an auth page like notifications
 let pageAuth = ($q, AuthFactory, $routeParams) => {
     return $q((resolve, reject) => {
         let currentUser = AuthFactory.getUser();

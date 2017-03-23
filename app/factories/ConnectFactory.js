@@ -53,7 +53,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 			uidTo: uidTo,
 			uidFrom: uidFrom,
 			content: msg,
-		};
+		}; // Send to our Notifications database
 		let x = fbNotificationDb.child(uidTo);
     	x.push(obj);
     };
@@ -62,7 +62,6 @@ app.factory('ConnectFactory', function($location, $route, $q) {
     let watchChange = (database, userUID, userLoggedIn, realName) => {
         database.child(userUID).child(userLoggedIn).on('value', (x) => {
             if (x.exists()) {
-            	console.log(database);
                 let msg = realName + ' Confirmed Request';
                 sendUidReq(userLoggedIn, userUID, msg);
 
