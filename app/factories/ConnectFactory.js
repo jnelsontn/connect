@@ -10,17 +10,19 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let fbPresenceDb = firebase.database().ref('presence');
 	let fbNotificationDb = firebase.database().ref('notifications');
 	let fbStatusUpdatesDb = firebase.database().ref('updates');
+	let fbRelationshipsDb = firebase.database().ref('relationships');
 	let date = new Date();
 
-    let didYouRequest = (userLoggedIn, userUID) => {
+	// 'Connection' Request
+    let didYouRequest = (database, userLoggedIn, userUID) => {
     	return $q(resolve => {
-	    	fbGroupsDb.child(userLoggedIn).child(userUID).once('value').then((x) => {
+	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                console.log('Did You Send Request? : Yes');
+		                // console.log('Did You Send Request? : Yes');
 		                resolve(true);
 		            } else {
-		                console.log('Did You Send Request? : No');
+		                // console.log('Did You Send Request? : No');
 		                resolve(false); 
 		            }
 	        	}
@@ -28,21 +30,22 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    });
     };
 
-    let didTheyRequest = (userUID, userLoggedIn) => {
+    let didTheyRequest = (database, userUID, userLoggedIn) => {
     	return $q(resolve => {
-			fbGroupsDb.child(userUID).child(userLoggedIn).once('value').then((x) => {
+			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                console.log('Have they requested You? : Yes');
+		                // console.log('Have they requested You? : Yes');
 		                resolve(true);
 		            } else {
-		                console.log('Have they requested You? : No');
+		                // console.log('Have they requested You? : No');
 		                resolve(false);
 		            }
 		        }
 	    	});
 		});
 	};
+	// End 'Connection' Request	
 
     let sendUidReq = (uidTo, uidFrom, msg) => {
 		let obj = {
@@ -50,15 +53,15 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 			uidTo: uidTo,
 			uidFrom: uidFrom,
 			content: msg,
-		};
+		}; // Send to our Notifications database
 		let x = fbNotificationDb.child(uidTo);
     	x.push(obj);
     };
 
-    let watchChange = (userUID, userLoggedIn, realName) => {
-        fbGroupsDb.child(userUID).child(userLoggedIn).on('value', (x) => {
+    // When a Request is Sent -- We wait for the Response
+    let watchChange = (database, userUID, userLoggedIn, realName) => {
+        database.child(userUID).child(userLoggedIn).on('value', (x) => {
             if (x.exists()) {
-                // console.log($scope.profile.name + ' Confirmed Request');
                 let msg = realName + ' Confirmed Request';
                 sendUidReq(userLoggedIn, userUID, msg);
 
@@ -68,6 +71,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
         });
     };
 
+    // Used to Change a specific photo
     let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
 	    if (document.querySelector(imageId)) {
 	        let newProfilePhotoId = document.querySelector(imageId);
@@ -89,6 +93,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    }
     };
 
+    // Used to Upload User Photos
 	let imageUpload = (imageId, userUID, imageDb) => {
 		if (document.querySelector(imageId)) {
 			let imageUploadId = document.querySelector(imageId);
@@ -109,7 +114,8 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		}
 	};
 
-	return { fbUserDb, fbMessagesDb, fbImagesDb, fbGroupsDb, fbPresenceDb, fbStatusUpdatesDb,
-		sendUidReq, watchChange, didYouRequest, didTheyRequest, changeSpecificPhoto, imageUpload };
+	return { fbUserDb, fbMessagesDb, fbImagesDb, fbGroupsDb, fbPresenceDb, fbStatusUpdatesDb, 
+		fbRelationshipsDb, didYouRequest, didTheyRequest, sendUidReq, watchChange, 
+		changeSpecificPhoto, imageUpload };
 
 });

@@ -1,13 +1,12 @@
 
 <br />
-
 <div class="row">
     <div class="offset-md-3"></div>
     
     <div class="col-md-3">
         <img src="{{profile.photo}}" width="250" height="250" id="profilephoto" class="rounded profile-photo" alt="Profile Photo"> 
         <br />
-        <a ng-show="myOwnProfile" href="#!/profile/{{profile.uid}}/edit">Edit Profile</a>
+        <a ng-show="myOwnProfile" ng-href="#!/profile/{{profile.uid}}/edit">Edit Profile</a>
     </div>
 
     <div class="col-md-3">
@@ -30,22 +29,38 @@
             About: <br />
             {{profile.description}} <br /> <br />
 
-            <div ng-show="AreWeConnected && !myOwnProfile">
+            <p ng-show="InRelationship || (myOwnProfile && !InRelationship) || AreWeConnected" ng-repeat="relationship in relationshipData">
+            In a relationship with: <a ng-href="#!/profile/{{relationship.partneruid}}">{{relationship.partner}}</a>
+            </p>
+
+            <!-- <div ng-show="AreWeConnected && !myOwnProfile"> -->
+            <div>
             Status:<br />
                 <p ng-show="isOnline" class="online">● {{profile.name}} is online now.</p>
                 <p ng-show="!isOnline" class="offline"> ● {{profile.name}} is offline.</p>
             </div>
 
-            <a href="#!/profile/{{profile.uid}}/images">View Photos</a>
+            <a ng-href="#!/profile/{{profile.uid}}/images">View {{profile.name}}'s Photos</a>
+
+
         </section> <!-- end Connections only -->
 
         <br />
 
         <!-- Request Connection Button -->
-        <button ng-show="!myOwnProfile && !AreWeConnected" ng-hide="(myOwnProfile && !respondReq) || respondReq" class="btn btn-secondary bg-faded btn-sm" ng-click="button_clicked || connect(uid)" ng-disabled="button_clicked">{{connectReqText}}</button>
+        <button ng-show="!myOwnProfile && !AreWeConnected" ng-hide="(myOwnProfile && !respondConnReq) || respondConnReq || myOwnProfile" class="btn btn-secondary bg-faded btn-sm" ng-click="connrequest_button_clicked || connectRequest(uid)" ng-disabled="connect_button_clicked">{{connectReqText}}</button>
 
         <!-- Confirm Connection Button -->
-        <button ng-show="respondReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToRequest(uid)">{{respondReqText}}</button>
+        <button ng-show="respondConnReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToConnectionRequest(uid)">{{respondConnReqText}}</button>
+
+        <br /><br />
+
+        <!-- Request Relationship Button -->
+        <button ng-show="(AreWeConnected && !InRelationship)" ng-hide="(myOwnProfile && !respondRelReq) || respondRelReq || InRelationship || !AreWeConnected" class="btn btn-secondary bg-faded btn-sm" ng-click="relationship_button_clicked || relationshipRequest(uid)" ng-disabled="relationship_button_clicked">
+        {{relationshipReqText}}</button>
+
+        <!-- Confirm Relationship Button -->
+        <button ng-show="respondRelReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToRelationshipRequest(uid)">{{respondRelReqText}}</button>
 
     </div>
 

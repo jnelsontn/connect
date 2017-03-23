@@ -16,8 +16,8 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 
 	    angular.forEach(allUsersArray, (user, i) => {
 
-		   	let haveIAdded = x.child(userLoggedIn).child(allUsersArray[i].uid).once('value')
-		   	.then((x) => {
+		   	let haveIAdded = x.child(userLoggedIn).child(allUsersArray[i].uid)
+		   	.once('value').then((x) => {
 				if (x.exists()) {
 					return true;
 				} else {
@@ -25,8 +25,8 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 				}
 			});
 		            
-			let haveTheyAdded = x.child(allUsersArray[i].uid).child(userLoggedIn).once('value')
-			.then((x) => {
+			let haveTheyAdded = x.child(allUsersArray[i].uid).child(userLoggedIn)
+			.once('value').then((x) => {
 				if (x.exists()) {
 					return true;
 				} else {
