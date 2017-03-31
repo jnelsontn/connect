@@ -46,7 +46,6 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
                     $scope.notificationNumber = x.numChildren();
                 });
             });
-
     	} else {
             $scope.isLoggedIn = false;
             $window.location.href = '#!/login';

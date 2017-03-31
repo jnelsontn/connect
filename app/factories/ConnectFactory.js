@@ -13,16 +13,14 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let fbRelationshipsDb = firebase.database().ref('relationships');
 	let date = new Date();
 
-	// 'Connection' Request
+	// 'Connection' Request - compare userLoggedIn to userUID (profile visited)
     let didYouRequest = (database, userLoggedIn, userUID) => {
     	return $q(resolve => {
 	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                // console.log('Did You Send Request? : Yes');
 		                resolve(true);
 		            } else {
-		                // console.log('Did You Send Request? : No');
 		                resolve(false); 
 		            }
 	        	}
@@ -35,10 +33,8 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
 		            if (x.exists()) {
-		                // console.log('Have they requested You? : Yes');
 		                resolve(true);
 		            } else {
-		                // console.log('Have they requested You? : No');
 		                resolve(false);
 		            }
 		        }
@@ -47,6 +43,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	};
 	// End 'Connection' Request	
 
+	// Send a Notice to the User's notification database
     let sendUidReq = (uidTo, uidFrom, msg) => {
 		let obj = {
 			timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
@@ -83,7 +80,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 
 	            profileRef.put(file).then(() => {
 	                console.log('Successfully Uploaded File!');
-
+	                // imagestorage: root-> uid -> profile.jpg
 	                profileRef.getDownloadURL().then((url) => {
 	                    fbUserDb.child(userLoggedIn).update(
 	                    { photo: url });
@@ -97,7 +94,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let imageUpload = (imageId, userUID, imageDb) => {
 		if (document.querySelector(imageId)) {
 			let imageUploadId = document.querySelector(imageId);
-			if (imageUploadId) {
+			if (imageUploadId) { // Must check so the imageId is NOT null.
 				imageUploadId.addEventListener('change', (e) => {
 					let file = e.target.files[0];
 					let imageRef = firebase.storage().ref(userUID).child(file.name);
@@ -106,7 +103,11 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 					imageRef.put(file).then(() => {
 						console.log('Successfully Uploaded File!');
 						imageRef.getDownloadURL().then((url) => {
-							imageDb.push({ photo: url });
+							imageDb.push({ 
+								photo: url, 
+								fullpath: imageRef.fullPath, 
+								filename: imageRef.name
+							});
 						});
 					});
 				}); 

@@ -27,17 +27,10 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.InRelationship = false;
     $scope.respondRelReq = false;
     $scope.relationship_button_clicked = false;
-    $scope.relationshipReqText = 'Relationship Request';
+    $scope.relationshipReqText = 'Request Relationship';
     $scope.respondRelReqText = 'Confirm Relationship';
 
     let date = new Date();
-
-    // I don't think $loaded is needed - we should resolve in routeparams?
-   /* $firebaseObject(ConnectFactory.fbUserDb.child(userUID)).$loaded().then((x) => {
-        console.log(x); 
-        $scope.profile = x;
-    });
-    */
 
     // If the Profile Matches the Logged In User, myOwnProfile = True (for Viewing Options on Pg)
     if (userLoggedIn === userUID) { 
@@ -46,6 +39,16 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
         let ChangeProfilePhoto = 
         ConnectFactory.changeSpecificPhoto('#the-file-input', userUID, 'profile.jpg', userLoggedIn);
     }
+
+    // Check if visitor is in existing relationship (or sent a request) and hide button if true
+    ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
+        if (x.exists()) { $scope.InRelationship = true; }
+    });
+
+    // Check if the user's profile being visited is in a relationship and hide button if true
+    ConnectFactory.fbRelationshipsDb.child(userUID).once('value').then((x) => {
+        if (x.exists()) { $scope.InRelationship = true; } 
+    });
 
     let checkOnlinePresense = ConnectFactory.fbPresenceDb.child(userUID).once('value', (x) => {
         if (x.exists()) { $scope.isOnline = true; }
@@ -128,7 +131,7 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.relationshipRequest = () => {
         if (userLoggedIn !== userUID) {
             ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
-                if (x.exists()) { // Make Modal Here too 
+                if (x.exists()) {
                     console.log('You are already in a relationship!');
                     // ngToast.create('You are already in a Relationship!');
                 } else {
@@ -184,11 +187,12 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
         if (userLoggedIn === userUID) {
             $scope.updates.$add({
                 timestamp: date.toLocaleString(),
+                uidfrom: userLoggedIn,
                 from: $scope.profile.name,
                 content: $scope.update
             });
             $scope.update = '';
-        }
+        }    
     };
 
     $scope.saveProfile = () => {

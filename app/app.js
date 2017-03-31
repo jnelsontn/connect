@@ -5,12 +5,10 @@ var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast']);
 // Ensure User is Authenticated for Viewing Pages
 let isAuth = ($q, AuthFactory) => {
     return $q((resolve, reject) => {
-        AuthFactory.isAuthenticated().then ((userExists) => {
+        AuthFactory.isAuthenticated().then((userExists) => {
             if (userExists){
-                // console.log('Authenticated.');
                 resolve();
             } else {
-                // console.log('Not Authenticated.');
                 reject();
             }
         });
@@ -28,6 +26,7 @@ let pageAuth = ($q, AuthFactory, $routeParams) => {
             resolve(true);
         } else {
             console.log('No!' + currentUser + ' does not match ' + currentUrl);
+            console.log('Try Viewing Your Profile First');
             reject(false);
         }
     });
@@ -64,6 +63,11 @@ app.config(($routeProvider) => {
     when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',
         controller: 'ImagesCtrl',
+        resolve: {isAuth}
+    }).
+    when('/global-status-updates', {
+        templateUrl: 'templates/global-status-updates.html',
+        controller: 'StatusUpdatesCtrl',
         resolve: {isAuth}
     }).
     when('/allusers', {

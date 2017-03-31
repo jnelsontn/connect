@@ -14,4 +14,13 @@ $scope.myOwnProfile = false;
 		let uploadAnImage = ConnectFactory.imageUpload('#image-upload', userUID, imageDb);
 	}
 
+	$scope.deleteSpecificPhoto = (photo) => {
+		$scope.photos.$remove(photo);
+
+		let deleteRef = firebase.storage().ref(userUID).child(photo.filename);
+		deleteRef.delete().then(() => {
+			console.log('Photo Successfully Deleted');
+		});
+	};
+
 });

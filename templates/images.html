@@ -24,7 +24,7 @@
 	                <div class="col-sm-3 photos-margin-left">
 	                    <img ng-src="{{photo.photo}}" width="300" height="300" class="rounded" onclick="window.open(this.src)">
 	                    <br />
-	                    <a ng-show="myOwnProfile" href="" ng-click="photos.$remove(photo)">Delete Photo</a> <br />
+	                    <a ng-click="deleteSpecificPhoto(photo)">Remove Photo</a><br />
 	                </div>
                 </div>
          	</div><br />
