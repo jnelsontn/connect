@@ -3,6 +3,8 @@
 app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObject, $firebaseArray, 
     $routeParams, AuthFactory, ConnectFactory, ngToast) {
 
+    $scope.toast = false;
+
     let userLoggedIn = AuthFactory.getUser();
     let userUID = $routeParams.profileId;
 
@@ -12,6 +14,11 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.messages = $firebaseArray(ConnectFactory.fbMessagesDb.child(userUID));
     $scope.updates = $firebaseArray(ConnectFactory.fbStatusUpdatesDb.child(userUID));
     $scope.relationshipData = $firebaseArray(ConnectFactory.fbRelationshipsDb.child(userUID));
+    // let relationshipData = $firebaseArray(ConnectFactory.fbRelationshipsDb.child(userUID));
+    // relationshipData.$loaded().then((x) => {
+    //     console.log('loaded', x);
+    //     $scope.relationshipData = x;
+    // });
 
     $scope.myOwnProfile = false;
     $scope.isOnline = false;
@@ -27,6 +34,9 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.InRelationship = false;
     $scope.respondRelReq = false;
     $scope.relationship_button_clicked = false;
+    $scope.hideRelationshipButton = false;
+    $scope.thisUserInRelationship = false;
+    $scope.loggedInUserInRelationship = false;
     $scope.relationshipReqText = 'Request Relationship';
     $scope.respondRelReqText = 'Confirm Relationship';
 
@@ -42,12 +52,15 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
 
     // Check if visitor is in existing relationship (or sent a request) and hide button if true
     ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
-        if (x.exists()) { $scope.InRelationship = true; }
+        if (x.exists()) { $scope.loggedInUserInRelationship = true; }
     });
 
     // Check if the user's profile being visited is in a relationship and hide button if true
     ConnectFactory.fbRelationshipsDb.child(userUID).once('value').then((x) => {
-        if (x.exists()) { $scope.InRelationship = true; } 
+        if (x.exists()) { 
+            $scope.hideRelationshipButton = true;
+            $scope.thisUserInRelationship = true;
+        } 
     });
 
     let checkOnlinePresense = ConnectFactory.fbPresenceDb.child(userUID).once('value', (x) => {
@@ -73,10 +86,14 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
                     } else if (yourRel && !theyRel) {
                         $scope.relationshipReqText = 'Relationship Pending';
                         $scope.relationship_button_clicked = true;
+                        $scope.toast = true;
                         console.log('You sent a relationship request. They have not responded.');
+                        // ngToast.create('You sent a relationship request. They have not responded.');
                     } else if (!yourRel && theyRel) {
                         $scope.respondRelReq = true;
+                        $scope.toast = true;
                         console.log('They sent you a relationship request. You have not responded.');
+                        //ngToast.create('They sent you a relationship request. You have not responded.');
                     }
                 });
             // Not Connected & No Relationship continue
@@ -132,8 +149,8 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
         if (userLoggedIn !== userUID) {
             ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
                 if (x.exists()) {
-                    console.log('You are already in a relationship!');
-                    // ngToast.create('You are already in a Relationship!');
+                    console.log('You are already in a relationship! - or have one pending');
+                    // ngToast.create('You are already in a Relationship! - or have one pending');
                 } else {
                     $scope.relationship_button_clicked = true;
                     ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).set({ 
@@ -160,9 +177,9 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     };
 
     $scope.removeRelationship = () => {
-        // Remove both User's keys under root->groups->uid->other-user
-        ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).remove();
-        ConnectFactory.fbRelationshipsDb.child(userUID).child(userLoggedIn).remove();
+        let theirKey = $scope.relationshipData.$keyAt(0);
+        ConnectFactory.fbRelationshipsDb.child(userLoggedIn).remove();
+        ConnectFactory.fbRelationshipsDb.child(theirKey).remove();
         $route.reload();
     };
     // End Relationship ----------------------->

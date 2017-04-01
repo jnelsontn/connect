@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast']);
+var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast', 'angular-img-cropper']);
 
 // Ensure User is Authenticated for Viewing Pages
 let isAuth = ($q, AuthFactory) => {
