@@ -14,8 +14,7 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
             // Add Ourselves to Presence List while Online
             let presenceRef = firebase.database().ref('.info/connected');
             presenceRef.on('value', (x) => {
-                if (x.exists()) {
-                // Remove Ourselves on Disconnect.
+                if (x.exists()) { // Remove Ourselves on Disconnect
                     userRef.onDisconnect().remove();
                     userRef.set(true);
                 }
@@ -46,7 +45,6 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
                     $scope.notificationNumber = x.numChildren();
                 });
             });
-
     	} else {
             $scope.isLoggedIn = false;
             $window.location.href = '#!/login';

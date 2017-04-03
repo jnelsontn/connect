@@ -24,16 +24,20 @@
 
         <!-- Connections only (or own Profile) -->
         <section ng-show="myOwnProfile || AreWeConnected" class="body-font-color">
+
             <a ng-href="mailto:{{profile.email}}">{{profile.email}}</a> <br /> <br />
 
             About: <br />
             {{profile.description}} <br /> <br />
 
-            <p ng-show="InRelationship || (myOwnProfile && !InRelationship) || AreWeConnected" ng-repeat="relationship in relationshipData">
+
+            <p ng-show="InRelationship || thisUserInRelationship" ng-repeat="relationship in relationshipData">
             In a relationship with: <a ng-href="#!/profile/{{relationship.partneruid}}">{{relationship.partner}}</a>
+            
+            <a ng-show="myOwnProfile && (thisUserInRelationship || InRelationship)" href="" confirmed-click="removeRelationship()" ng-confirm-click="Confirm Remove Relationship?">| Remove Relationship</a>
+
             </p>
 
-            <!-- <div ng-show="AreWeConnected && !myOwnProfile"> -->
             <div>
             Status:<br />
                 <p ng-show="isOnline" class="online">● {{profile.name}} is online now.</p>
@@ -41,7 +45,6 @@
             </div>
 
             <a ng-href="#!/profile/{{profile.uid}}/images">View {{profile.name}}'s Photos</a>
-
 
         </section> <!-- end Connections only -->
 
@@ -53,17 +56,14 @@
         <!-- Confirm Connection Button -->
         <button ng-show="respondConnReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToConnectionRequest(uid)">{{respondConnReqText}}</button>
 
-        <br /><br />
-
         <!-- Request Relationship Button -->
-        <button ng-show="(AreWeConnected && !InRelationship)" ng-hide="(myOwnProfile && !respondRelReq) || respondRelReq || InRelationship || !AreWeConnected" class="btn btn-secondary bg-faded btn-sm" ng-click="relationship_button_clicked || relationshipRequest(uid)" ng-disabled="relationship_button_clicked">
+        <button ng-show="(AreWeConnected && !InRelationship) || !hideRelationshipButton || !loggedInUserInRelationship" ng-hide="(myOwnProfile && !respondRelReq) || respondRelReq || InRelationship || !AreWeConnected || hideRelationshipButton || loggedInUserInRelationship" class="btn btn-secondary bg-faded btn-sm" ng-click="relationship_button_clicked || relationshipRequest(uid)" ng-disabled="relationship_button_clicked">
         {{relationshipReqText}}</button>
 
         <!-- Confirm Relationship Button -->
         <button ng-show="respondRelReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToRelationshipRequest(uid)">{{respondRelReqText}}</button>
 
     </div>
-
 
 </div>
 
@@ -92,12 +92,12 @@
                 <li ng-repeat="update in updates | orderBy:'timestamp':true">
                     <b>{{update.timestamp}}:</b>
                     <a ng-show="myOwnProfile" href="" ng-click="updates.$remove(update)">(remove)</a>
-                    <p>{{ update.content }}</p>
+                    <p>{{update.content}}</p>
                 </li>
                 <p ng-show="!updates.length">No Recent Updates</p>
             </ul>
         <!-- End Status Updates --> 
-            <br />
+        <br />
 
         <!-- Start Messages -->
             <form class="input-group" ng-submit="addMessage()"> <!-- add message box -->
@@ -112,10 +112,9 @@
             <ul class="list-group form-control bg-faded msg-update-boxes">
                 <b>Messages:</b> <br /> <!-- show posted messages -->
                 <li ng-repeat="message in messages | orderBy:'timestamp':true">
-                    <b>{{message.timestamp}}. {{ message.from }} wrote:</b>
+                    <b>{{message.timestamp}}: {{message.from}} wrote:</b>
                     <a ng-show="myOwnProfile" href="" ng-click="messages.$remove(message)">(remove)</a>
-                    <p>{{ message.content }}</p>
-                    
+                    <p>{{message.content}}</p>
                 </li>
                 <p ng-show="!messages.length">No Messages</p>
             </ul>

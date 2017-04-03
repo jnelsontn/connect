@@ -1,0 +1,18 @@
+<br />
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="list-group form-control msg-update-boxes bg-faded">
+            <b>Global Status Updates (from all users):</b> <br />
+
+            <li ng-repeat="update in statusupdates | orderBy:'timestamp':true">
+                <p class="paddingleft">
+                <b>{{update.timestamp}}. <a ng-href="#!/profile/{{update.uidfrom}}">{{ update.from }}</a> wrote:</b> <br />
+                    {{ update.content }}
+                </p>
+            </li>
+                <p ng-show="!statusupdates.length">No Recent Updates</p>
+        </ul>
+    </div>
+</div>
+
+<br /><br /> <!-- keep these -->

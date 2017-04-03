@@ -1,12 +1,12 @@
 'use strict';
 
-app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObject, $firebaseArray, 
-    $routeParams, AuthFactory, ConnectFactory, ngToast) {
+app.controller('ProfileCtrl', function($scope, $window, $q, $timeout, $route, $firebaseObject, $firebaseArray, 
+    $routeParams, AuthFactory, ConnectFactory) {
 
     let userLoggedIn = AuthFactory.getUser();
     let userUID = $routeParams.profileId;
 
-    // Load Databases using AngularFire -- do we need $loaded?
+    // Load Databases using AngularFire
     $scope.profile = $firebaseObject(ConnectFactory.fbUserDb.child(userUID));
     $scope.visitorProfile = $firebaseObject(ConnectFactory.fbUserDb.child(userLoggedIn));
     $scope.messages = $firebaseArray(ConnectFactory.fbMessagesDb.child(userUID));
@@ -27,25 +27,47 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.InRelationship = false;
     $scope.respondRelReq = false;
     $scope.relationship_button_clicked = false;
-    $scope.relationshipReqText = 'Relationship Request';
+    $scope.hideRelationshipButton = false;
+    $scope.thisUserInRelationship = false;
+    $scope.loggedInUserInRelationship = false;
+    $scope.relationshipReqText = 'Request Relationship';
     $scope.respondRelReqText = 'Confirm Relationship';
 
     let date = new Date();
 
-    // I don't think $loaded is needed - we should resolve in routeparams?
-   /* $firebaseObject(ConnectFactory.fbUserDb.child(userUID)).$loaded().then((x) => {
-        console.log(x); 
-        $scope.profile = x;
-    });
-    */
-
     // If the Profile Matches the Logged In User, myOwnProfile = True (for Viewing Options on Pg)
     if (userLoggedIn === userUID) { 
         $scope.myOwnProfile = true; 
-        // Event Listener to Change Profile Photo
         let ChangeProfilePhoto = 
         ConnectFactory.changeSpecificPhoto('#the-file-input', userUID, 'profile.jpg', userLoggedIn);
     }
+
+    // Check if logged-in user is in existing relationship (or sent a request)
+    ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
+        if (x.exists()) { $scope.loggedInUserInRelationship = true; }
+    });
+
+    // Check if the user's profile being visited is in a relationship
+    ConnectFactory.fbRelationshipsDb.child(userUID).once('value').then((x) => {
+        if (x.exists()) { 
+            $scope.hideRelationshipButton = true; 
+
+            var partnerRel;
+            x.forEach((y) => {
+                let value = y.val();
+                partnerRel = value.partneruid;
+            }); 
+
+            // Check if the user's profile has a confirmation of relationship
+            ConnectFactory.fbRelationshipsDb.child(partnerRel).once('value').then((b) => {
+                if (b.exists()) {
+                    $timeout(() => {
+                        $scope.thisUserInRelationship = true;
+                    }, 1000);
+                }
+            });
+        }
+    });
 
     let checkOnlinePresense = ConnectFactory.fbPresenceDb.child(userUID).once('value', (x) => {
         if (x.exists()) { $scope.isOnline = true; }
@@ -54,42 +76,39 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     // Connection & Relationships
     let yourConnReq = ConnectFactory.didYouRequest(ConnectFactory.fbGroupsDb, userLoggedIn, userUID);
     let theirConnReq = ConnectFactory.didTheyRequest(ConnectFactory.fbGroupsDb, userUID, userLoggedIn);
-    let completeRequest =
-    $q.all([yourConnReq, theirConnReq]).then(([you, they]) => {
-        if (userLoggedIn !== userUID) {
-            if (you && they) {
-                $scope.AreWeConnected = true;
-                console.log('We are Connected: ', $scope.AreWeConnected);
-                let yourRelReq = ConnectFactory.didYouRequest(ConnectFactory.fbRelationshipsDb, userLoggedIn, userUID);
-                let theirRelReq = ConnectFactory.didTheyRequest(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn);
-                $q.all([yourRelReq, theirRelReq]).then(([yourRel, theyRel]) => {
-                    // Relationship
-                    if (yourRel && theyRel) {
-                        $scope.InRelationship = true;
-                        console.log('You are in a relationship: ', $scope.InRelationship);
-                    } else if (yourRel && !theyRel) {
-                        $scope.relationshipReqText = 'Relationship Pending';
-                        $scope.relationship_button_clicked = true;
-                        console.log('You sent a relationship request. They have not responded.');
-                    } else if (!yourRel && theyRel) {
-                        $scope.respondRelReq = true;
-                        console.log('They sent you a relationship request. You have not responded.');
-                    }
-                });
-            // Not Connected & No Relationship continue
-            } else if (you && !they) {
-                $scope.connectReqText = 'Connection Request Pending';
-                $scope.connect_button_clicked = true;
-                console.log('You sent a Connection request. They have not responded.');
-            } else if (!you && they) {
-                $scope.respondConnReq = true;
-                console.log('They sent you a Connection request. You have not responded.');
-            } else if ((you === undefined) && (they === undefined)) {
-                $scope.myOwnProfile = true;
-                console.log('You are on your own Profile');
-            } else {
-                console.log('We are not Connected.');
-            }
+    let completeRequest = $q.all([yourConnReq, theirConnReq]).then(([you, they]) => {
+        if (you && they) {
+            $scope.AreWeConnected = true;
+            console.log('We are Connected: ', $scope.AreWeConnected);
+            let yourRelReq = ConnectFactory.didYouRequest(ConnectFactory.fbRelationshipsDb, userLoggedIn, userUID);
+            let theirRelReq = ConnectFactory.didTheyRequest(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn);
+            $q.all([yourRelReq, theirRelReq]).then(([yourRel, theyRel]) => {
+                // Relationship
+                if (yourRel && theyRel) {
+                    $scope.InRelationship = true;
+                    console.log('You are in a relationship: ', $scope.InRelationship);
+                } else if (yourRel && !theyRel) {
+                    $scope.relationshipReqText = 'Relationship Pending';
+                    $scope.relationship_button_clicked = true;
+                    console.log('You sent a relationship request. They have not responded.');
+                } else if (!yourRel && theyRel) {
+                    $scope.respondRelReq = true;
+                    console.log('They sent you a relationship request. You have not responded.');
+                }
+            });
+        // Not Connected & No Relationship continue
+        } else if (you && !they) {
+            $scope.connectReqText = 'Connection Request Pending';
+            $scope.connect_button_clicked = true;
+            console.log('You sent a Connection request. They have not responded.');
+        } else if (!you && they) {
+            $scope.respondConnReq = true;
+            console.log('They sent you a Connection request. You have not responded.');
+        } else if ((you === undefined) && (they === undefined)) {
+            $scope.myOwnProfile = true;
+            console.log('You are on your own Profile - This message should not occur');
+        } else {
+            console.log('We are not Connected.');
         }
     });
 
@@ -128,9 +147,8 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     $scope.relationshipRequest = () => {
         if (userLoggedIn !== userUID) {
             ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
-                if (x.exists()) { // Make Modal Here too 
-                    console.log('You are already in a relationship!');
-                    // ngToast.create('You are already in a Relationship!');
+                if (x.exists()) {
+                    console.log('You are already in a relationship! - or have one pending');
                 } else {
                     $scope.relationship_button_clicked = true;
                     ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).set({ 
@@ -157,9 +175,11 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
     };
 
     $scope.removeRelationship = () => {
-        // Remove both User's keys under root->groups->uid->other-user
-        ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).remove();
-        ConnectFactory.fbRelationshipsDb.child(userUID).child(userLoggedIn).remove();
+        // We never allow more than one relationship req. at one time; therefore,
+        // we can remove the object at position 0.
+        let theirKey = $scope.relationshipData.$keyAt(0);
+        ConnectFactory.fbRelationshipsDb.child(userLoggedIn).remove();
+        ConnectFactory.fbRelationshipsDb.child(theirKey).remove();
         $route.reload();
     };
     // End Relationship ----------------------->
@@ -184,11 +204,12 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $route, $firebaseObj
         if (userLoggedIn === userUID) {
             $scope.updates.$add({
                 timestamp: date.toLocaleString(),
+                uidfrom: userLoggedIn,
                 from: $scope.profile.name,
                 content: $scope.update
             });
             $scope.update = '';
-        }
+        }    
     };
 
     $scope.saveProfile = () => {
