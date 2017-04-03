@@ -1,8 +1,8 @@
 'use strict';
 
-app.controller('StatusUpdatesCtrl', function($scope, $window, $timeout, $q, $firebaseArray, ConnectFactory) {
+app.controller('StatusUpdatesCtrl', function($scope, $firebaseArray, ConnectFactory) {
 
-	$firebaseArray(ConnectFactory.fbStatusUpdatesDb).$loaded().then( () => {
+	$firebaseArray(ConnectFactory.fbStatusUpdatesDb).$loaded().then(() => {
 		let newArr = []; 
 		ConnectFactory.fbStatusUpdatesDb.on('child_added', (x) => {
 	 		let data = x.val();

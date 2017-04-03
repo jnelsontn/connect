@@ -24,16 +24,17 @@
 
         <!-- Connections only (or own Profile) -->
         <section ng-show="myOwnProfile || AreWeConnected" class="body-font-color">
+
             <a ng-href="mailto:{{profile.email}}">{{profile.email}}</a> <br /> <br />
 
             About: <br />
             {{profile.description}} <br /> <br />
 
 
-            <p ng-show="thisUserInRelationship" ng-repeat="relationship in relationshipData">
+            <p ng-show="InRelationship || thisUserInRelationship" ng-repeat="relationship in relationshipData">
             In a relationship with: <a ng-href="#!/profile/{{relationship.partneruid}}">{{relationship.partner}}</a>
             
-            <a ng-show="myOwnProfile && thisUserInRelationship" href="" confirmed-click="removeRelationship()" ng-confirm-click="Confirm Remove Relationship?">| Remove Relationship</a>
+            <a ng-show="myOwnProfile && (thisUserInRelationship || InRelationship)" href="" confirmed-click="removeRelationship()" ng-confirm-click="Confirm Remove Relationship?">| Remove Relationship</a>
 
             </p>
 
@@ -44,7 +45,6 @@
             </div>
 
             <a ng-href="#!/profile/{{profile.uid}}/images">View {{profile.name}}'s Photos</a>
-
 
         </section> <!-- end Connections only -->
 
@@ -64,7 +64,6 @@
         <button ng-show="respondRelReq" class="btn btn-secondary bg-faded btn-sm" ng-click="respondToRelationshipRequest(uid)">{{respondRelReqText}}</button>
 
     </div>
-
 
 </div>
 
@@ -98,7 +97,7 @@
                 <p ng-show="!updates.length">No Recent Updates</p>
             </ul>
         <!-- End Status Updates --> 
-            <br />
+        <br />
 
         <!-- Start Messages -->
             <form class="input-group" ng-submit="addMessage()"> <!-- add message box -->
@@ -116,7 +115,6 @@
                     <b>{{message.timestamp}}: {{message.from}} wrote:</b>
                     <a ng-show="myOwnProfile" href="" ng-click="messages.$remove(message)">(remove)</a>
                     <p>{{message.content}}</p>
-                    
                 </li>
                 <p ng-show="!messages.length">No Messages</p>
             </ul>

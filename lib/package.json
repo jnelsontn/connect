@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "devDependencies": {
     "angular": "^1.6.2",
-    "angular-img-cropper": "0.0.2",
     "angular-route": "^1.6.3",
     "angularfire": "^2.3.0",
     "bootstrap": "^4.0.0-alpha.6",

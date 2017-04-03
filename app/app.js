@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast', 'angular-img-cropper']);
+var app = angular.module('Connect', ['firebase', 'ngRoute', 'ngToast']);
 
 // Ensure User is Authenticated for Viewing Pages
 let isAuth = ($q, AuthFactory) => {
@@ -16,8 +16,6 @@ let isAuth = ($q, AuthFactory) => {
 };
 
 // Only Profile Owner May Edit
-// this creates a bug - when viewing another's profile
-// and then navigating to an auth page like notifications
 let pageAuth = ($q, AuthFactory, $routeParams) => {
     return $q((resolve, reject) => {
         let currentUser = AuthFactory.getUser();

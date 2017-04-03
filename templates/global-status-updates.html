@@ -6,13 +6,12 @@
 
             <li ng-repeat="update in statusupdates | orderBy:'timestamp':true">
                 <p class="paddingleft">
-                    <b>{{update.timestamp}}. <a ng-href="#!/profile/{{update.uidfrom}}">{{ update.from }}</a> wrote:</b> <br />
+                <b>{{update.timestamp}}. <a ng-href="#!/profile/{{update.uidfrom}}">{{ update.from }}</a> wrote:</b> <br />
                     {{ update.content }}
-                    <!-- <a ng-show="myOwnProfile" href="" ng-click="statusupdates.$remove(message)">(remove)</a> -->
                 </p>
             </li>
                 <p ng-show="!statusupdates.length">No Recent Updates</p>
-            </ul>
+        </ul>
     </div>
 </div>
 

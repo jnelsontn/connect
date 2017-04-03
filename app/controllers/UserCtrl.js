@@ -39,9 +39,8 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 			});
 
 			console.log("User Logged In: ", uid);
-			let token = result.credential.accessToken;
-
 	    	$scope.isLoggedIn = true;
+	    	
 	    	$routeParams.profileId = uid;
 	    	$window.location.href = "#!/profile/" + $routeParams.profileId;
 		}).catch((error) => { console.log("Error with Google Login", error); });

@@ -6,17 +6,14 @@
             <li ng-repeat="notice in notifications | orderBy:'timestamp':true">
                 <p class="paddingleft">
                     <b>{{notice.timestamp}}:</b>
-                    {{ notice.content }}
+                    {{notice.content}}
                     <a href="" ng-click="notifications.$remove(notice)">(x)</a> <br />
-
-                  <!--  <b class="paddingleft">Message:</b><i>{{notice.longMsg}}</i> -->
-                    
                     <a ng-href="#!/profile/{{notice.uidFrom}}">View User's Profile.</a>
                 </p>
             <br />
             </li>
             <p ng-show="!notifications.length">No Recent Updates</p>
-            </ul>
+        </ul>
     </div>
 </div>
 
