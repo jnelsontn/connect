@@ -57,14 +57,14 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 
 	// When a Request is Sent -- We wait for the Response
 	let watchChange = (database, userUID, userLoggedIn, realName) => {
-        database.child(userUID).child(userLoggedIn).on('value', (x) => {
-            if (x.exists()) {
-                let msg = realName + ' Confirmed Request';
-                sendUidReq(userLoggedIn, userUID, msg);
+		database.child(userUID).child(userLoggedIn).on('value', (x) => {
+			if (x.exists()) {
+				let msg = realName + ' Confirmed Request';
+				sendUidReq(userLoggedIn, userUID, msg);
 
-                // If Requestor on Requestee Profile, Reload Page
-                if ($location.url() === ('/profile/' + userUID)) { $route.reload(); }
-            }
+				// If Requestor on Requestee Profile, Reload Page
+				if ($location.url() === ('/profile/' + userUID)) { $route.reload(); }
+			}
 		});
 	};
 
