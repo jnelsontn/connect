@@ -14,7 +14,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	let date = new Date();
 
 	// 'Connection' Request - compare userLoggedIn to userUID (profile visited)
-    let didYouRequest = (database, userLoggedIn, userUID) => {
+	let didYouRequest = (database, userLoggedIn, userUID) => {
     	return $q(resolve => {
 	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
 	        	if (userLoggedIn !== userUID) {
@@ -28,7 +28,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	    });
     };
 
-    let didTheyRequest = (database, userUID, userLoggedIn) => {
+	let didTheyRequest = (database, userUID, userLoggedIn) => {
     	return $q(resolve => {
 			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
 		    	if (userLoggedIn !== userUID) {
@@ -38,13 +38,13 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		                resolve(false);
 		            }
 		        }
-	    	});
+			});
 		});
 	};
 	// End 'Connection' Request	
 
 	// Send a Notice to the User's notification database
-    let sendUidReq = (uidTo, uidFrom, msg) => {
+	let sendUidReq = (uidTo, uidFrom, msg) => {
 		let obj = {
 			timestamp: (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear(),
 			uidTo: uidTo,
@@ -52,11 +52,11 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 			content: msg,
 		}; // Send to our Notifications database
 		let x = fbNotificationDb.child(uidTo);
-    	x.push(obj);
+		x.push(obj);
     };
 
     // When a Request is Sent -- We wait for the Response
-    let watchChange = (database, userUID, userLoggedIn, realName) => {
+	let watchChange = (database, userUID, userLoggedIn, realName) => {
         database.child(userUID).child(userLoggedIn).on('value', (x) => {
             if (x.exists()) {
                 let msg = realName + ' Confirmed Request';
@@ -69,7 +69,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
     };
 
     // Used to Change a specific photo
-    let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
+	let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
 	    if (document.querySelector(imageId)) {
 	        let newProfilePhotoId = document.querySelector(imageId);
 	        let profileRef = firebase.storage().ref(userUID).child(fileName);
@@ -82,11 +82,11 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	                profileRef.getDownloadURL().then((url) => {
 	                    fbUserDb.child(userLoggedIn).update(
 	                    { photo: url });
-	                });
-	            });
-	        });
-	    }
-    };
+					});
+				});
+			});
+		}
+	};
 
     // Used to Upload User Photos
 	let imageUpload = (imageId, userUID, imageDb) => {
