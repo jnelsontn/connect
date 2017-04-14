@@ -37,7 +37,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		            } else {
 		                resolve(false);
 		            }
-		        }
+				}
 			});
 		});
 	};
