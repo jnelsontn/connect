@@ -66,7 +66,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
                 if ($location.url() === ('/profile/' + userUID)) { $route.reload(); }
             }
         });
-    };
+	};
 
 	// Used to Change a specific photo
 	let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
