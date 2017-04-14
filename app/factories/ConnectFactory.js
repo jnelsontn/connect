@@ -65,7 +65,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
                 // If Requestor on Requestee Profile, Reload Page
                 if ($location.url() === ('/profile/' + userUID)) { $route.reload(); }
             }
-        });
+		});
 	};
 
 	// Used to Change a specific photo
