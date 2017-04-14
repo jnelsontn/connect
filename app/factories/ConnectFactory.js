@@ -29,14 +29,14 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	};
 
 	let didTheyRequest = (database, userUID, userLoggedIn) => {
-    	return $q(resolve => {
+		return $q(resolve => {
 			database.child(userUID).child(userLoggedIn).once('value').then((x) => {
-		    	if (userLoggedIn !== userUID) {
-		            if (x.exists()) {
-		                resolve(true);
-		            } else {
-		                resolve(false);
-		            }
+				if (userLoggedIn !== userUID) {
+					if (x.exists()) {
+						resolve(true);
+					} else {
+						resolve(false);
+					}
 				}
 			});
 		});
