@@ -79,36 +79,27 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $timeout, $route, $f
     let completeRequest = $q.all([yourConnReq, theirConnReq]).then(([you, they]) => {
         if (you && they) {
             $scope.AreWeConnected = true;
-            console.log('We are Connected: ', $scope.AreWeConnected);
             let yourRelReq = ConnectFactory.didYouRequest(ConnectFactory.fbRelationshipsDb, userLoggedIn, userUID);
             let theirRelReq = ConnectFactory.didTheyRequest(ConnectFactory.fbRelationshipsDb, userUID, userLoggedIn);
             $q.all([yourRelReq, theirRelReq]).then(([yourRel, theyRel]) => {
                 // Relationship
                 if (yourRel && theyRel) {
                     $scope.InRelationship = true;
-                    console.log('You are in a relationship: ', $scope.InRelationship);
                 } else if (yourRel && !theyRel) {
                     $scope.relationshipReqText = 'Relationship Pending';
                     $scope.relationship_button_clicked = true;
-                    console.log('You sent a relationship request. They have not responded.');
                 } else if (!yourRel && theyRel) {
                     $scope.respondRelReq = true;
-                    console.log('They sent you a relationship request. You have not responded.');
                 }
             });
         // Not Connected & No Relationship continue
         } else if (you && !they) {
             $scope.connectReqText = 'Connection Request Pending';
             $scope.connect_button_clicked = true;
-            console.log('You sent a Connection request. They have not responded.');
         } else if (!you && they) {
             $scope.respondConnReq = true;
-            console.log('They sent you a Connection request. You have not responded.');
         } else if ((you === undefined) && (they === undefined)) {
             $scope.myOwnProfile = true;
-            console.log('You are on your own Profile - This message should not occur');
-        } else {
-            console.log('We are not Connected.');
         }
     });
 
@@ -147,9 +138,7 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $timeout, $route, $f
     $scope.relationshipRequest = () => {
         if (userLoggedIn !== userUID) {
             ConnectFactory.fbRelationshipsDb.child(userLoggedIn).once('value').then((x) => {
-                if (x.exists()) {
-                    console.log('You are already in a relationship! - or have one pending');
-                } else {
+                if (!x.exists()) {
                     $scope.relationship_button_clicked = true;
                     ConnectFactory.fbRelationshipsDb.child(userLoggedIn).child(userUID).set({ 
                         relationship: true,
@@ -215,7 +204,6 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $timeout, $route, $f
     $scope.saveProfile = () => {
         if (userLoggedIn === userUID) {
             $scope.profile.$save().then(() => {
-                console.log('Profile Saved!');
                 $window.location.href = '#!/profile/' + userUID;
             });
         }

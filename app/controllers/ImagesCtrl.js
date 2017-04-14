@@ -18,9 +18,7 @@ $scope.myOwnProfile = false;
 		$scope.photos.$remove(photo);
 
 		let deleteRef = firebase.storage().ref(userUID).child(photo.filename);
-		deleteRef.delete().then(() => {
-			console.log('Photo Successfully Deleted');
-		});
+		deleteRef.delete();
 	};
 
 });

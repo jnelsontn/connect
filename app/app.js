@@ -23,8 +23,6 @@ let pageAuth = ($q, AuthFactory, $routeParams) => {
         if (currentUser === currentUrl) {
             resolve(true);
         } else {
-            console.log('No!' + currentUser + ' does not match ' + currentUrl);
-            console.log('Try Viewing Your Profile First');
             reject(false);
         }
     });

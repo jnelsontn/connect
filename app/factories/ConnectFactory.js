@@ -46,7 +46,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 	// Send a Notice to the User's notification database
     let sendUidReq = (uidTo, uidFrom, msg) => {
 		let obj = {
-			timestamp: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+			timestamp: (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear(),
 			uidTo: uidTo,
 			uidFrom: uidFrom,
 			content: msg,
@@ -76,10 +76,8 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 
 	        newProfilePhotoId.addEventListener('change', (e) => {
 	            let file = e.target.files[0];
-	            console.log('File Properties: ', file);
 
 	            profileRef.put(file).then(() => {
-	                console.log('Successfully Uploaded File!');
 	                // imagestorage: root-> uid -> profile.jpg
 	                profileRef.getDownloadURL().then((url) => {
 	                    fbUserDb.child(userLoggedIn).update(
@@ -98,10 +96,8 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 				imageUploadId.addEventListener('change', (e) => {
 					let file = e.target.files[0];
 					let imageRef = firebase.storage().ref(userUID).child(file.name);
-					console.log('File Properties: ', file);
 
 					imageRef.put(file).then(() => {
-						console.log('Successfully Uploaded File!');
 						imageRef.getDownloadURL().then((url) => {
 							imageDb.push({ 
 								photo: url, 

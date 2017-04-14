@@ -6,7 +6,7 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 
 	$scope.logout = () => {
 		AuthFactory.logoutUser().then((data) => {
-			$window.location.url = "#!/login";
+			$window.location.url = '#!/login';
 			$scope.isLoggedIn = false;
 		});
 	};
@@ -21,11 +21,8 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 			let uid = result.user.uid;
 
 			ConnectFactory.fbUserDb.child(uid).once('value').then((x) => {
-				if (x.exists()) {
-					console.log(uid + ' already exists. do nothing');
-				} else {
+				if (!x.exists()) {
 					// Initial Set-Up Only - Get Google Profile
-					console.log(user.displayName + ' set-up');
 					ConnectFactory.fbUserDb.child(uid).set({
 						name: user.displayName,
 						email: user.email,
@@ -38,12 +35,10 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 				}
 			});
 
-			console.log("User Logged In: ", uid);
 	    	$scope.isLoggedIn = true;
-	    	
 	    	$routeParams.profileId = uid;
-	    	$window.location.href = "#!/profile/" + $routeParams.profileId;
-		}).catch((error) => { console.log("Error with Google Login", error); });
+	    	$window.location.href = '#!/profile/' + $routeParams.profileId;
+		});
 	};
 
 });

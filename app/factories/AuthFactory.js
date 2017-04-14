@@ -13,7 +13,6 @@ app.factory('AuthFactory', function($q) {
 					currentUser = user.uid;
 					resolve(true);
 				} else {
-					console.log('No User Authenticated.');
 					resolve(false);
 				}
 			});
