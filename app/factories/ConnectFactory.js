@@ -15,18 +15,18 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 
 	// 'Connection' Request - compare userLoggedIn to userUID (profile visited)
 	let didYouRequest = (database, userLoggedIn, userUID) => {
-    	return $q(resolve => {
-	    	database.child(userLoggedIn).child(userUID).once('value').then((x) => {
-	        	if (userLoggedIn !== userUID) {
-		            if (x.exists()) {
-		                resolve(true);
-		            } else {
-		                resolve(false); 
-		            }
-	        	}
-	    	});
-	    });
-    };
+		return $q(resolve => {
+			database.child(userLoggedIn).child(userUID).once('value').then((x) => {
+				if (userLoggedIn !== userUID) {
+					if (x.exists()) {
+						resolve(true);
+					} else {
+						resolve(false); 
+					}
+				}
+			});
+		});
+	};
 
 	let didTheyRequest = (database, userUID, userLoggedIn) => {
     	return $q(resolve => {
@@ -53,9 +53,9 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		}; // Send to our Notifications database
 		let x = fbNotificationDb.child(uidTo);
 		x.push(obj);
-    };
+	};
 
-    // When a Request is Sent -- We wait for the Response
+	// When a Request is Sent -- We wait for the Response
 	let watchChange = (database, userUID, userLoggedIn, realName) => {
         database.child(userUID).child(userLoggedIn).on('value', (x) => {
             if (x.exists()) {
@@ -68,7 +68,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
         });
     };
 
-    // Used to Change a specific photo
+	// Used to Change a specific photo
 	let changeSpecificPhoto = (imageId, userUID, fileName, userLoggedIn) => {
 	    if (document.querySelector(imageId)) {
 	        let newProfilePhotoId = document.querySelector(imageId);
@@ -88,7 +88,7 @@ app.factory('ConnectFactory', function($location, $route, $q) {
 		}
 	};
 
-    // Used to Upload User Photos
+	// Used to Upload User Photos
 	let imageUpload = (imageId, userUID, imageDb) => {
 		if (document.querySelector(imageId)) {
 			let imageUploadId = document.querySelector(imageId);
