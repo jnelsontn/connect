@@ -1,14 +1,42 @@
-## FrontEnd-capstone - CONNECT
-### A Social Media Application for simple real-time communication between users, building relationships, and sharing photos.
+Connect - Social Network | [LIVE DEMO https://jnelsontn.github.io](https://jnelsontn.github.io)
+* * *
 
-"Connect" is a social-media application written using the Angular Framework, Javascript & Google's Firebase for the back-end database.
+**ABOUT:**
 
-Users sign-in using their Google account and the system builds their profile based on the Account's credentials. Once signed-up, users have the ability to modify their profile, add a profile image, upload photos to a gallery and 'connect' with other users.
+Connect is an alternative to large social networks and allows users to create a profile, find connections, upload and share photos and send real-time messages.
 
-Once a user is connected with another, they can share updates/photos, write real time messages to each other, and add a relationship/partner.
+**USAGE:**
 
-## Installation
+To sign-in a Google account is required.
+Once signed in, a user can create their profile and find connections. Once a connection has been created, users can send real-time messages and share photos.
 
-Connect comes with all the required libraries in the "dist" folder. If, for development purposes, you would like to install it on your machine and modify the code, it may be easier to install the required libraries by using the "npm install" command in the lib/ folder.
 
-By default, Connect will access the database I have used in the creation of this project. If you would like to use your own Firebase database, modify the app/values/fb-creds.js file and use your own Firebase database information.
+**INSTALLATION:**
+
+Connect includes all dependencies; however, a Firebase database is required for the backend service.
+Once a database is created, edit [app/values/fb-creds.js](app/values/fb-creds.js) and provide the appropriate credentials within the quotations.
+
+    app.constant('FBCreds', {
+        apiKey: 'api-key-here',
+        authDomain: 'auth-domain-here',
+        databaseURL: 'database-url-here'
+        storageBucket: 'storage-bucket-id-here'
+    });
+
+**SCREENSHOTS**
+
+Screenshots displaying Connect's functionality.
+
+1. [User Profile View](screenshots/profileview.png)
+2. [Photo Album and Real Time Notifications](screenshots/photos-and-notification-of-request.png)
+3. [Connection/Friend Profile](screenshots/connected-profile.png)
+4. [Connections/Friends List](screenshots/connected-list.png)
+5. [Request Connection/Other User has not confirmed](screenshots/connection-requested.png)
+
+**TECHNOLOGIES**
+
+Front-End: AngularJS/Firebase JS Library | 
+Back-End: Firebase Database
+
+
+
