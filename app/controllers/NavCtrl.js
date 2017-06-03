@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NavCtrl', function($scope, $window, $firebaseArray, $firebaseObject, $q, ngToast, ConnectFactory) {
+app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, ConnectFactory) {
 	$scope.isLoggedIn = false;
 
     firebase.auth().onAuthStateChanged((user) => {

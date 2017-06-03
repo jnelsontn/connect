@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('ConnectFactory', function($location, $route, $q, $firebaseArray) {
+app.factory('ConnectFactory', function($location, $route, $q) {
 
 	// Firebase Database References
 	let fbUserDb = firebase.database().ref('users');
