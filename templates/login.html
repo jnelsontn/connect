@@ -3,14 +3,16 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="form-control msg-update-boxes bg-faded">
- 
- 			<b>CONNECT</b> - Login Using Your Google Account: <br /><br />
- 			<div class="offset-sm-3"></div>
- 			
- 			<div class="col-sm-3">
-				<button class="btn btn-secondary btn-sm bg-faded" ng-click="loginGoogle()">Login Here</button>
-			</div><br /><br />
 
+ 			<b>CONNECT</b>, Current Users Online: <b>{{ usersOnline }}</b> <br /><br />
+            
+            <div class="col-sm-12">
+                Login with your Google Account: <br /> <br />
+                <button class="btn btn-secondary btn-sm bg-faded" ng-click="loginGoogle()">Login Here</button>
+            </div><br />
+
+            For more on Google Sign-In integration <a href="https://developers.google.com/identity/sign-in/web/" target="_blank">click here</a>.
+            
         </div>
     </div>
 </div>
@@ -18,21 +20,36 @@
 <br /><br />
 
 <div class="row">
-	<div class="offset-sm-4"></div>
+	<div class="col-sm-4">
+         <div class="form-control msg-update-boxes bg-faded">    
+         <b> Screenshots (Connect in Action) </b>
+
+         <br /><br />
+
+         <ul>
+            <li><a href="screenshots/profileview.png" target="_blank">- User Profile View</a><li/>
+            <li><a href="screenshots/photos-and-notification-of-request.png" target="_blank">- Photo Album & Real Time Notifications</a></li>
+            <li><a href="screenshots/connected-profile.png" target="_blank">- Connection/Friend Profile </a></li>
+            <li><a href="screenshots/connected-list.png" target="_blank">- Connections/Friends List</a></li>
+            <li><a href="screenshots/connection-requested.png" target="_blank">- Request Connection/No Confirmation</a></li>
+        </ul>
+
+        </div>
+    </div>
     <div class="col-sm-8">
         <div class="form-control msg-update-boxes bg-faded">
  			<b>CONNECT - SOCIAL NETWORK - WHAT IS IT?</b>
 
- 			<br /><br />
+ 			<br />
 
  			<p class="body-font-color paddingleft">
- 				Connect is a social with many common 'social network' features, such as:
+ 				Connect has many 'social network' features, such as:
 
  				<ul>
- 					<li>- Ability to Add Connections</li>
- 					<li>- Post and Send Messages </li>
- 					<li>- Share Photos </li>
- 					<li>- Real-Time Notifications</li>
+ 					<li>- Ability to Add Connections (Easy to Find Friends!)</li>
+ 					<li>- Post and Send Messages (Including Global Status Updates!)</li>
+ 					<li>- Share Photos (Upload, Download, Profile Photo) </li>
+ 					<li>- Real-Time Notifications (Messages, Online Users, Requests)</li>
  				</ul>
 
  			</p>
@@ -52,7 +69,7 @@
             <br /><br />
 
             <p class="body-font-color paddingleft">
-                1. <a href="https://github.com/jnelsontn" target="_blank">My Github Repository</a> <br />
+                1. <a href="https://github.com/jnelsontn" target="_blank">Jordan Nelson's Github Repository</a> <br />
                 2. <a href="https://github.com/jnelsontn/jnelsontn.github.io" target="_blank">Connect's Source Code</a>
 
             </p>

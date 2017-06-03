@@ -1,0 +1,16 @@
+<br />
+
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="list-group form-control msg-update-boxes bg-faded">
+            <b>Current Users Online:</b> <br />
+            <li ng-repeat="(key, value) in online_users">
+                <p class="paddingleft">
+                    <a ng-href="#!/profile/{{key}}"> <b>{{ value.name }}</b> </a>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<br /><br /> <!-- keep these -->
