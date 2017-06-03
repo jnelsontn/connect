@@ -2,6 +2,13 @@
 
 app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory, ConnectFactory) {
 
+	// Number of Users Online
+	ConnectFactory.fbPresenceDb.on('value', (x) => {
+		$scope.$evalAsync(() => {
+			$scope.usersOnline = x.numChildren();
+		});
+	});
+	
 	$scope.isLoggedIn = false;
 
 	$scope.logout = () => {

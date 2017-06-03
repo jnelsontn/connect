@@ -3,14 +3,14 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="form-control msg-update-boxes bg-faded">
- 
- 			<b>CONNECT</b> - Login with Google: <br /><br />
- 			<div class="offset-sm-3"></div>
- 			
- 			<div class="col-sm-3">
-				<button class="btn btn-secondary btn-sm bg-faded" ng-click="loginGoogle()">Login Here</button>
-			</div><br /><br />
+
+ 			<b>CONNECT</b>, Current Users Online: <b>{{ usersOnline }}</b> <br /><br />
             
+            <div class="col-sm-12">
+                Login with your Google Account: <br /> <br />
+                <button class="btn btn-secondary btn-sm bg-faded" ng-click="loginGoogle()">Login Here</button>
+            </div><br />
+
             For more on Google Sign-In integration <a href="https://developers.google.com/identity/sign-in/web/" target="_blank">click here</a>.
             
         </div>
