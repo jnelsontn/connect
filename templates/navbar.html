@@ -34,7 +34,9 @@
          </li>
     </ul>
 
-    <span class="navbar-text" ng-show="isLoggedIn">Users Online: <b>{{usersOnline}}</b></span>
+    <span class="navbar-text" ng-show="isLoggedIn">
+        <a class="nav-link" href="#!/onlineusers">Users Online: <b>{{usersOnline}}</b></a>
+    </span>
     <toast ng-show="isLoggedIn" ng-repeat="notice in notifications"></toast>
     
 </nav>

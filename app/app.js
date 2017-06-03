@@ -66,6 +66,11 @@ app.config(($routeProvider) => {
         controller: 'StatusUpdatesCtrl',
         resolve: {isAuth}
     }).
+    when('/onlineusers', {
+        templateUrl: 'templates/onlineusers.html',
+        controller: 'OnlineUsersCtrl',
+        resolve: {isAuth}
+    }).
     when('/allusers', {
         templateUrl: 'templates/alluserslist.html',
         controller: 'AllUsersListCtrl',

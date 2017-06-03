@@ -63,12 +63,13 @@ app.controller('ProfileCtrl', function($scope, $window, $q, $timeout, $route, $f
                 if (b.exists()) {
                     $timeout(() => {
                         $scope.thisUserInRelationship = true;
-                    }, 1000);
+                    }, 100);
                 }
             });
         }
     });
 
+    // Display whether the user is online/offline on their profile page
     let checkOnlinePresense = ConnectFactory.fbPresenceDb.child(userUID).once('value', (x) => {
         if (x.exists()) { $scope.isOnline = true; }
      });

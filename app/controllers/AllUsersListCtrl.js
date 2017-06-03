@@ -16,6 +16,8 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 
 	    angular.forEach(allUsersArray, (user, i) => {
 
+	    	// Checking the groups->current user db against the key of each user
+	    	// to see whether the current user has requested a connection
 		   	let haveIAdded = x.child(userLoggedIn).child(allUsersArray[i].uid)
 		   	.once('value').then((x) => {
 				if (x.exists()) {
@@ -24,7 +26,9 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 					return false;
 				}
 			});
-		            
+
+		   	// Checking each user to see whether they have sent a request to the
+		   	// current user...
 			let haveTheyAdded = x.child(allUsersArray[i].uid).child(userLoggedIn)
 			.once('value').then((x) => {
 				if (x.exists()) {
@@ -34,6 +38,8 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 				}
 			});
 
+			// If there is a match, we know they are connected. If not, we put
+			// them in another list.
 	        let finalPush = combinedArr.push(
 	            $q.all([haveIAdded, haveTheyAdded]).then(([you, they]) => {
 	                if (you && they) {
@@ -42,6 +48,7 @@ app.controller('AllUsersListCtrl', function($scope, $q, $firebaseArray, ConnectF
 	                    notConnectedArr.push(allUsersArray[i]);
 	                }
 
+	                // Remove the current user's profile from the results
 	               	if (allUsersArray[i].uid === userLoggedIn) {
 						notConnectedArr.pop();
 	        		}
