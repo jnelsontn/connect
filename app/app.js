@@ -54,7 +54,7 @@ app.config(($routeProvider) => {
     when('/profile/:profileId/notifications', {
         templateUrl: 'templates/notifications.html',
         controller: 'NotificationsCtrl',
-        resolve: {isAuth, pageAuth}
+        resolve: {isAuth}
     }).
     when('/profile/:profileId/images', {
         templateUrl: 'templates/images.html',

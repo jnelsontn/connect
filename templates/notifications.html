@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <ul class="list-group form-control msg-update-boxes bg-faded">
             <b>Recent Notifications:</b> <br />
-            <li ng-repeat="notice in notifications | orderBy:'timestamp':true">
+            <li ng-repeat="notice in notifications | orderBy:'timestamp':true" ng-show="myOwnProfile">
                 <p class="paddingleft">
                     <b>{{notice.timestamp}}:</b>
                     {{notice.content}}
@@ -12,7 +12,7 @@
                 </p>
             <br />
             </li>
-            <p ng-show="!notifications.length">No Recent Updates</p>
+            <p ng-show="!notifications.length" ng-show="myOwnProfile">No Recent Updates</p>
         </ul>
     </div>
 </div>
