@@ -2,5 +2,6 @@ lib/.sass-cache/
 lib/node_modules
 .DS_Store
 app/values/fb-creds.js
+values/fb-creds.js
 fb-creds.js
 CNAME
