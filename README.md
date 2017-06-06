@@ -13,6 +13,9 @@ Once signed in, a user can create their profile and find connections. Once a con
 
 **INSTALLATION:**
 
+Clone down the Connect repository:
+```git clone https://github.com/jnelsontn/jnelsontn.github.io.git```
+
 Connect includes all dependencies; however, a Firebase database is required for the backend service.
 Once a database is created, edit [app/values/fb-creds.js](app/values/fb-creds.js) and provide the appropriate credentials within the quotations.
 
@@ -22,6 +25,8 @@ Once a database is created, edit [app/values/fb-creds.js](app/values/fb-creds.js
         databaseURL: 'database-url-here'
         storageBucket: 'storage-bucket-id-here'
     });
+
+Once you have entered in your Firebase credentials, all that is left is to use initialize a http server (NodeJS http-server, nginx, etc.) of your choice.
 
 **SCREENSHOTS**
 
