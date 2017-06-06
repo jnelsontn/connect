@@ -1,4 +1,4 @@
-Connect - Social Network | [LIVE DEMO https://jnelsontn.github.io](https://jnelsontn.github.io)
+Connect - Social Network | [LIVE DEMO https://connect.digitalmarshmellow.com](http://connect.digitalmarshmellow.com)
 * * *
 
 **ABOUT:**
@@ -27,6 +27,8 @@ Once a database is created, edit [app/values/fb-creds.js](app/values/fb-creds.js
     });
 
 Once you have entered in your Firebase credentials, all that is left is to use initialize a http server (NodeJS http-server, nginx, etc.) of your choice.
+
+If you would like to update dependencies, a Gruntfile.js and package.json are included in the lib/ directory.
 
 **SCREENSHOTS**
 
