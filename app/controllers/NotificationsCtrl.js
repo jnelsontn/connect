@@ -4,6 +4,7 @@ app.controller('NotificationsCtrl', function($scope, $routeParams, $firebaseArra
 	let userLoggedIn = AuthFactory.getUser();
 	let userUID = $routeParams.profileId;
 	let notificationsRef = firebase.database().ref('notifications/' + userLoggedIn);
+	$scope.myOwnProfile = false;
 
 	if (userLoggedIn === userUID) {
 		$scope.myOwnProfile = true;
