@@ -81,7 +81,7 @@ app.config(($routeProvider) => {
 app.config(['ngToastProvider', (ngToast) => {
     ngToast.configure({
       verticalPosition: 'bottom',
-      horizontalPosition: 'right',
+      horizontalPosition: 'center',
       maxNumber: 1
     });
 }]);

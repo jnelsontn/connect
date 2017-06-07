@@ -3,14 +3,15 @@
 <head>
 
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<title>Connect</title>
 
 	<script type="text/javascript" src="dist/js/angular.min.js"></script>
 
-	<link href="dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
-	<link href="dist/css/ngToast.min.css" rel="stylesheet" type="text/css" >
-	<link href="css/main.css" rel="stylesheet" type="text/css" >
+	<link href="dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="dist/css/ngToast.min.css" rel="stylesheet" type="text/css">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -21,11 +22,19 @@
 	<!-- handled in app.js by $routeProvider -->
 	<div class="container-fluid"><div ng-view></div></div>
 
+
 <!-- Required Modules -->
 <script type="text/javascript" src="dist/js/firebase.js"></script>
 <script type="text/javascript" src="dist/js/angular-route.min.js"></script>
 <script type="text/javascript" src="dist/js/angularfire.min.js"></script>
 <script type="text/javascript" src="dist/js/angular-sanitize.min.js"></script>
+
+<!-- Required by Bootstrap for Collapsable Toogle/Mobile... -->
+<script type="text/javascript" src="dist/js/jquery.slim.min.js"></script>
+<script type="text/javascript" src="dist/js/tether.min.js"></script>
+<script type="text/javascript" src="dist/js/bootstrap.min.js"></script>
+
+<!-- For Toast Notifications -->
 <script type="text/javascript" src="dist/js/ngToast.min.js"></script>
 
 <!-- Initialize Module -->
