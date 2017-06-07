@@ -2,18 +2,18 @@
 
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-lg-12">
         <div class="form-control msg-update-boxes bg-faded">
             <b>Connections:</b> <br /><br />
 
             <div class="row" ng-repeat="connection in connectedList">
 
-                <div class="offset-sm-1"></div>
-                <div class="col-sm-3">
-                    <img src="{{connection.photo}}" width="150" height="150" class="rounded profile-photo profile-photo-mini">
+                <div class="offset-lg-1"></div>
+                <div class="col-lg-3">
+                     <a ng-href="#!/profile/{{connection.uid}}"><img src="{{connection.photo}}" width="150" height="150" class="rounded profile-photo profile-photo-mini"></a>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     {{connection.name}} <br /> 
                     <a ng-href="mailto:{{connection.email}}">{{connection.email}} <br />
 
@@ -21,7 +21,7 @@
                     <a ng-href="#!/profile/{{connection.uid}}">View Profile</a>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-lg-2">
                     <!-- online status ? -->
                 </div>
             </div>
@@ -35,23 +35,23 @@
 <br />
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-lg-12">
         <div class="form-control msg-update-boxes bg-faded">
             <b>Not Connected:</b> <br /><br />
 
             <div class="row" ng-repeat="stranger in notConnectedList">
 
-                <div class="offset-sm-1"></div>
-                <div class="col-sm-3">
+                <div class="offset-lg-1"></div>
+                <div class="col-lg-3">
                     <img src="{{stranger.photo}}" width="150" height="150" class="rounded profile-photo profile-photo-mini">
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     {{stranger.name}} <br /><br />
                     <a ng-href="#!/profile/{{stranger.uid}}">View Profile</a>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-lg-2">
                     
                 </div>
             </div>

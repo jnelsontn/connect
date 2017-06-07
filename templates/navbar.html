@@ -1,42 +1,50 @@
-<nav class="navbar navbar-nav navbar-light navbar-toggleable-xl fixed-top bg-faded" ng-controller="NavCtrl">
+<nav class="navbar navbar-nav navbar-light navbar-toggleable-md fixed-top bg-faded" ng-controller="NavCtrl">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" 
+    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
     <a class="navbar-brand" style="padding-left: 5px;">CONNECT</a>
-
-    <ul class="navbar-nav mr-auto" ng-show="isLoggedIn">
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
-         </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/notifications"> Notifications ({{notificationNumber}})</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/allusers">All Users</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/global-status-updates">Status Updates (Global)</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#!/logout">Logout</a>
-         </li>
-
-         <li class="nav-link" ng-repeat="notice in notifications">
-            | New Notification: <a  ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
-            <a ng-href="" ng-click="notifications.$remove(notice)">(x)</a>
-         </li>
-    </ul>
-
-    <span class="navbar-text" ng-show="isLoggedIn">
-        <a class="nav-link" href="#!/onlineusers">Users Online: <b>{{usersOnline}}</b></a>
-    </span>
-    <toast ng-show="isLoggedIn" ng-repeat="notice in notifications"></toast>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
     
+        <ul class="navbar-nav mr-auto" ng-show="isLoggedIn">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}">Profile</a>
+             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/images"> My Photos</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#!/profile/{{userLoggedInProfile}}/notifications"> Notifications ({{notificationNumber}})</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#!/allusers">All Users</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#!/global-status-updates">Status Updates (Global)</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#!/logout">Logout</a>
+             </li>
+
+             <li class="nav-link" ng-repeat="notice in notifications">
+                | New Notification: <a  ng-href="#!/profile/{{notice.uidFrom}}">{{notice.content}}</a>
+                <a ng-href="" ng-click="notifications.$remove(notice)">(x)</a>
+             </li>
+    
+        </ul>
+
+        <span class="navbar-text" ng-show="isLoggedIn">
+            <a class="nav-link" href="#!/onlineusers">Users Online: <b>{{usersOnline}}</b></a>
+        </span>
+        <toast ng-show="isLoggedIn" ng-repeat="notice in notifications"></toast>
+
+    </div>
 </nav>
