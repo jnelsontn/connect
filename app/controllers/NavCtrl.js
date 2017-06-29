@@ -8,10 +8,8 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
             $scope.isLoggedIn = true;
 
             if (user.isAnonymous) {
-                console.log('yes');
                 $scope.userLoggedInProfile = 'anonymous-123456';
             } else {
-                console.log('no');
                 $scope.userLoggedInProfile = user.uid;
             }
 

@@ -23,8 +23,8 @@ app.factory('AuthFactory', function($q) {
 		});
 	};
 
-	let getUser = () => { 
-		return currentUser; 
+	let getUser = () => {
+		return currentUser;
 	};
 
 	let provider = new firebase.auth.GoogleAuthProvider();
