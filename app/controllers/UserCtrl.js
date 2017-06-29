@@ -21,6 +21,33 @@ app.controller('UserCtrl', function ($scope, $window, $routeParams, AuthFactory,
 	// Onload - Ensure all User's are Logged Out
 	if (AuthFactory.isAuthenticated()) { $scope.logout(); }
 
+	$scope.demoAnon = () => {
+		firebase.auth().signInAnonymously().then( (result) => {
+			let uid = 'anonymous-123456';
+
+			ConnectFactory.fbUserDb.child(uid).once('value').then((x) => {
+					ConnectFactory.fbUserDb.child(uid).set({
+						name: 'Anonymous User',
+						email: 'notreal@digitalmarshmellow.com',
+						photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
+						uid: 'anonymous-123456',
+						description: 'This information is overwrote on the next login'
+					});
+					ConnectFactory.fbGroupsDb.child(uid).set({
+						groupOwner: uid
+					});
+					ConnectFactory.fbMessagesDb.child(uid).remove();
+					ConnectFactory.fbImagesDb.child(uid).remove();
+					ConnectFactory.fbStatusUpdatesDb.child(uid).remove();
+					ConnectFactory.fbRelationshipsDb.child(uid).remove();
+			});
+
+	    	$scope.isLoggedIn = true;
+	    	$routeParams.profileId = uid;
+	    	$window.location.href = '#!/profile/' + $routeParams.profileId;
+		});
+	};
+
 	$scope.loginGoogle = () => {
 		let provider = new firebase.auth.GoogleAuthProvider();
 		firebase.auth().signInWithPopup(provider).then((result) => {
