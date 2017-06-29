@@ -10,7 +10,11 @@ app.factory('AuthFactory', function($q) {
 		return $q((resolve) => {
 			firebase.auth().onAuthStateChanged((user) => {
 				if (user) {
-					currentUser = user.uid;
+					if (user.isAnonymous) {
+						currentUser = 'anonymous-123456';
+					} else {
+						currentUser = user.uid;
+					}
 					resolve(true);
 				} else {
 					resolve(false);
@@ -19,7 +23,9 @@ app.factory('AuthFactory', function($q) {
 		});
 	};
 
-	let getUser = () => { return currentUser; };
+	let getUser = () => { 
+		return currentUser; 
+	};
 
 	let provider = new firebase.auth.GoogleAuthProvider();
 

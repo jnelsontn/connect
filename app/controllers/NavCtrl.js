@@ -6,7 +6,14 @@ app.controller('NavCtrl', function($scope, $window, $firebaseArray, ngToast, Con
     firebase.auth().onAuthStateChanged((user) => {
     	if (user) {
             $scope.isLoggedIn = true;
-            $scope.userLoggedInProfile = user.uid;
+
+            if (user.isAnonymous) {
+                console.log('yes');
+                $scope.userLoggedInProfile = 'anonymous-123456';
+            } else {
+                console.log('no');
+                $scope.userLoggedInProfile = user.uid;
+            }
 
             let listRef = ConnectFactory.fbPresenceDb.child(user.uid);
             let userRef = listRef.push();
