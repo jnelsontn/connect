@@ -1,4 +1,4 @@
-Connect - Social Network | [LIVE DEMO https://connect.digitalmarshmellow.com](http://connect.digitalmarshmellow.com)
+Connect - Social Network
 * * *
 
 **ABOUT:**
